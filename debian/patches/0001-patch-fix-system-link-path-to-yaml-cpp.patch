@@ -1,0 +1,21 @@
+From: John Zupin <johnz@lunarg.com>
+Date: Fri, 12 Jul 2024 13:36:25 -0600
+Subject: patch: fix system link path to yaml-cpp
+
+---
+ src/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8b471d4..4fc738d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -90,7 +90,7 @@ target_link_libraries(crash_diagnostic PUBLIC
+     Vulkan::LayerSettings
+     Vulkan::SafeStruct
+     Vulkan::UtilityHeaders
+-    yaml-cpp::yaml-cpp
++    yaml-cpp
+     ${CMAKE_DL_LIBS}
+     $<TARGET_NAME_IF_EXISTS:PkgConfig::XCB>
+     $<TARGET_NAME_IF_EXISTS:PkgConfig::X11>
