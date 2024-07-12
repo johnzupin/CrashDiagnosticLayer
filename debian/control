@@ -1,0 +1,26 @@
+Source: crashdiagnosticlayer
+Section: unknown
+Priority: optional
+Maintainer: John Zupin <johnz@lunarg.com>
+Build-Depends: debhelper-compat (= 12),
+ cmake,
+ pkg-config,
+ vulkan-headers,
+ vulkan-utility-libraries-dev,
+ spirv-headers,
+ libyaml-cpp-dev,
+ glslang-dev,
+ libxcb1-dev,
+ libx11-dev,
+ libwayland-dev,
+ libxrandr-dev
+Standards-Version: 4.4.1
+Homepage: https://github.com/LunarG/CrashDiagnosticLayer.git
+Vcs-Browser: https://github.com/LunarG/CrashDiagnosticLayer.git
+Vcs-Git: https://github.com/LunarG/CrashDiagnosticLayer.git
+
+Package: crashdiagnosticlayer
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ The Crash Diagnostic Layer (CDL) is a Vulkan layer to help track down and identify the cause of GPU hangs and crashes.
