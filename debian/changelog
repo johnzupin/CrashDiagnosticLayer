@@ -1,3 +1,13 @@
+crashdiagnosticlayer (1.3.290.0~rc1-1lunarg22.04-1) jammy; urgency=medium
+
+  [ John Zupin ]
+  * packaging: debian: create patches for yaml-cpp
+
+  [ Jeremy Gebben ]
+  * build: Update Vulkan-Headers and VUL to 1.3.290
+
+ -- john <john@odin>  Tue, 16 Jul 2024 15:00:18 -0600
+
 crashdiagnosticlayer (0.01-1) unstable; urgency=medium
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
