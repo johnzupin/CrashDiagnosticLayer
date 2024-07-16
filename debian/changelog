@@ -1,3 +1,10 @@
+crashdiagnosticlayer (1.3.290.0~rc1-1lunarg24.04-1) noble; urgency=medium
+
+  [ Jeremy Gebben ]
+  * build: Update Vulkan-Headers and VUL to 1.3.290
+
+ -- john <john@odin>  Tue, 16 Jul 2024 15:01:51 -0600
+
 crashdiagnosticlayer (0.01-1) unstable; urgency=medium
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
