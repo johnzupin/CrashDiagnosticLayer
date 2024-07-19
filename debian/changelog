@@ -1,3 +1,15 @@
+crashdiagnosticlayer (1.3.290.0~rc2-1lunarg24.04-1) noble; urgency=medium
+
+  [ Jeremy Gebben ]
+  * scripts: Improve ray tracing codegen
+  * cdl: Fix ray tracing internal state dump
+  * cdl: Set the currently supported platforms in the manifest
+  * cdl: Fix begin and end cmd buffer checkpoints
+  * tests: Add ray tracing tests
+  * scripts: Print device address command parameters in hex
+
+ -- john <john@odin>  Fri, 19 Jul 2024 14:50:51 -0600
+
 crashdiagnosticlayer (1.3.290.0~rc1-1lunarg24.04-1) noble; urgency=medium
 
   [ Jeremy Gebben ]
