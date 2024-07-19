@@ -64,11 +64,13 @@ void CommandBuffer::WriteBeginCheckpoint() {
     // - vkEndCommandBuffer: n+2
     if (checkpoint_) {
         checkpoint_->WriteTop(vk_command_buffer_, begin_value_ + 1);
+        checkpoint_->WriteBottom(vk_command_buffer_, begin_value_ + 1);
     }
 }
 
 void CommandBuffer::WriteEndCheckpoint() {
     if (checkpoint_) {
+        checkpoint_->WriteTop(vk_command_buffer_, end_value_);
         checkpoint_->WriteBottom(vk_command_buffer_, end_value_);
     }
 }
@@ -181,9 +183,9 @@ VkResult CommandBuffer::PostBeginCommandBuffer(VkCommandBuffer commandBuffer,
 }
 
 VkResult CommandBuffer::PreEndCommandBuffer(VkCommandBuffer commandBuffer) {
+    WriteEndCheckpoint();
     tracker_.EndCommandBuffer(commandBuffer);
 
-    WriteEndCheckpoint();
     return VK_SUCCESS;
 }
 
@@ -363,15 +365,14 @@ class CommandBufferInternalState {
     bool Print(const Command& cmd, YAML::Emitter& os, const ObjectInfoDB& name_resolver);
 
     const Pipeline* GetPipeline(VkPipelineBindPoint bind_point) const {
-        return bound_pipelines_[static_cast<uint32_t>(bind_point)];
+        auto iter = bound_pipelines_.find(bind_point);
+        return iter != bound_pipelines_.end() ? iter->second : nullptr;
     }
 
    private:
-    static constexpr int kNumBindPoints = 2;  // graphics, compute
-
     Device& device_;
-    std::array<const Pipeline*, kNumBindPoints> bound_pipelines_{nullptr, nullptr};
-    std::array<ActiveDescriptorSets, kNumBindPoints> bound_descriptors_;
+    std::map<VkPipelineBindPoint, const Pipeline*> bound_pipelines_;
+    std::map<VkPipelineBindPoint, ActiveDescriptorSets> bound_descriptors_;
 };
 
 // Returns the pipeline used by this command or -1 if no pipeline used.
@@ -431,7 +432,7 @@ void CommandBufferInternalState::Mutate(const Command& cmd) {
 }
 
 bool CommandBufferInternalState::Print(const Command& cmd, YAML::Emitter& os, const ObjectInfoDB& name_resolver) {
-    int bind_point = -1;
+    VkPipelineBindPoint bind_point;
     switch (cmd.type) {
         case Command::Type::kCmdDraw:
         case Command::Type::kCmdDrawIndexed:
@@ -445,28 +446,31 @@ bool CommandBufferInternalState::Print(const Command& cmd, YAML::Emitter& os, co
             bind_point = VK_PIPELINE_BIND_POINT_COMPUTE;
             break;
 
+        case Command::Type::kCmdTraceRaysKHR:
+        case Command::Type::kCmdTraceRaysIndirectKHR:
+        case Command::Type::kCmdTraceRaysNV:
+            bind_point = VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR;
+            break;
+
         default:
+            return false;
             break;
     }
 
-    if (-1 != bind_point) {
-        os << YAML::Key << "internalState" << YAML::Value << YAML::BeginMap;
+    os << YAML::Key << "internalState" << YAML::Value << YAML::BeginMap;
 
-        os << YAML::Key << "pipeline" << YAML::Value;
-        const auto& pipeline = bound_pipelines_[static_cast<uint32_t>(bind_point)];
-        if (pipeline) {
-            pipeline->Print(os, name_resolver);
-        } else {
-            os << YAML::BeginMap << YAML::EndMap;
-        }
-
-        os << YAML::Key << "descriptorSets" << YAML::Value;
-        bound_descriptors_[static_cast<uint32_t>(bind_point)].Print(device_, os);
-        os << YAML::EndMap;
-        return true;
+    os << YAML::Key << "pipeline" << YAML::Value;
+    const auto& pipeline = bound_pipelines_[bind_point];
+    if (pipeline) {
+        pipeline->Print(os, name_resolver);
+    } else {
+        os << YAML::BeginMap << YAML::EndMap;
     }
 
-    return false;
+    os << YAML::Key << "descriptorSets" << YAML::Value;
+    bound_descriptors_[bind_point].Print(device_, os);
+    os << YAML::EndMap;
+    return true;
 }
 
 void CommandBuffer::DumpContents(YAML::Emitter& os, const Settings& settings, uint64_t secondary_cb_queue_seq,
