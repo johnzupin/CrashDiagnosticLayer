@@ -1,3 +1,24 @@
+crashdiagnosticlayer (1.3.296.0~rc1-1lunarg24.04-1) noble; urgency=medium
+
+  [ Jeremy Gebben ]
+  * build: Update Vulkan-Headers and VUL to 1.3.291
+  * build: Update shader dependencies to latest
+  * build: Update Vulkan-Headers and VUL to 1.3.292
+  * build: Update Vulkan-Headers and VUL to 1.3.293
+  * build: Update Vulkan-Headers and VUL to 1.3.294
+  * build: Update SPIRV dependencies to latest
+  * build: Update Vulkan-Headers and VUL to 1.3.295
+  * cdl: Fix dispatch of vkGetSemaphoreCounterValue{KHR}()
+  * cdl: Don't report support for VK_EXT_debug_marker
+  * scripts: Redo intercept function lists
+  * cdl: Make checkpoint managers thread safe
+  * scripts: Don't shallow copy pNext in command recording
+  * cdl: Fix locking in BufferMarkerCheckpointMgr::Allocate
+  * build: Update shader toolchain for next SDK
+  * build: Update Vulkan-Headers and VUL to 1.3.296
+
+ -- john <john@odin>  Tue, 01 Oct 2024 11:56:36 -0600
+
 crashdiagnosticlayer (1.3.290.0~rc2-1lunarg24.04-1) noble; urgency=medium
 
   [ Jeremy Gebben ]
