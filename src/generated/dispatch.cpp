@@ -622,6 +622,12 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
         (PFN_vkGetDeviceImageSubresourceLayoutKHR)pa(device, "vkGetDeviceImageSubresourceLayoutKHR");
     dt->GetImageSubresourceLayout2KHR =
         (PFN_vkGetImageSubresourceLayout2KHR)pa(device, "vkGetImageSubresourceLayout2KHR");
+    dt->CreatePipelineBinariesKHR = (PFN_vkCreatePipelineBinariesKHR)pa(device, "vkCreatePipelineBinariesKHR");
+    dt->DestroyPipelineBinaryKHR = (PFN_vkDestroyPipelineBinaryKHR)pa(device, "vkDestroyPipelineBinaryKHR");
+    dt->GetPipelineKeyKHR = (PFN_vkGetPipelineKeyKHR)pa(device, "vkGetPipelineKeyKHR");
+    dt->GetPipelineBinaryDataKHR = (PFN_vkGetPipelineBinaryDataKHR)pa(device, "vkGetPipelineBinaryDataKHR");
+    dt->ReleaseCapturedPipelineDataKHR =
+        (PFN_vkReleaseCapturedPipelineDataKHR)pa(device, "vkReleaseCapturedPipelineDataKHR");
     dt->CmdSetLineStippleKHR = (PFN_vkCmdSetLineStippleKHR)pa(device, "vkCmdSetLineStippleKHR");
     dt->GetCalibratedTimestampsKHR = (PFN_vkGetCalibratedTimestampsKHR)pa(device, "vkGetCalibratedTimestampsKHR");
     dt->CmdBindDescriptorSets2KHR = (PFN_vkCmdBindDescriptorSets2KHR)pa(device, "vkCmdBindDescriptorSets2KHR");
@@ -1012,10 +1018,12 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
     dt->BindOpticalFlowSessionImageNV =
         (PFN_vkBindOpticalFlowSessionImageNV)pa(device, "vkBindOpticalFlowSessionImageNV");
     dt->CmdOpticalFlowExecuteNV = (PFN_vkCmdOpticalFlowExecuteNV)pa(device, "vkCmdOpticalFlowExecuteNV");
+    dt->AntiLagUpdateAMD = (PFN_vkAntiLagUpdateAMD)pa(device, "vkAntiLagUpdateAMD");
     dt->CreateShadersEXT = (PFN_vkCreateShadersEXT)pa(device, "vkCreateShadersEXT");
     dt->DestroyShaderEXT = (PFN_vkDestroyShaderEXT)pa(device, "vkDestroyShaderEXT");
     dt->GetShaderBinaryDataEXT = (PFN_vkGetShaderBinaryDataEXT)pa(device, "vkGetShaderBinaryDataEXT");
     dt->CmdBindShadersEXT = (PFN_vkCmdBindShadersEXT)pa(device, "vkCmdBindShadersEXT");
+    dt->CmdSetDepthClampRangeEXT = (PFN_vkCmdSetDepthClampRangeEXT)pa(device, "vkCmdSetDepthClampRangeEXT");
     dt->GetFramebufferTilePropertiesQCOM =
         (PFN_vkGetFramebufferTilePropertiesQCOM)pa(device, "vkGetFramebufferTilePropertiesQCOM");
     dt->GetDynamicRenderingTilePropertiesQCOM =
@@ -1030,6 +1038,24 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
 #ifdef VK_USE_PLATFORM_SCREEN_QNX
     dt->GetScreenBufferPropertiesQNX = (PFN_vkGetScreenBufferPropertiesQNX)pa(device, "vkGetScreenBufferPropertiesQNX");
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
+    dt->GetGeneratedCommandsMemoryRequirementsEXT =
+        (PFN_vkGetGeneratedCommandsMemoryRequirementsEXT)pa(device, "vkGetGeneratedCommandsMemoryRequirementsEXT");
+    dt->CmdPreprocessGeneratedCommandsEXT =
+        (PFN_vkCmdPreprocessGeneratedCommandsEXT)pa(device, "vkCmdPreprocessGeneratedCommandsEXT");
+    dt->CmdExecuteGeneratedCommandsEXT =
+        (PFN_vkCmdExecuteGeneratedCommandsEXT)pa(device, "vkCmdExecuteGeneratedCommandsEXT");
+    dt->CreateIndirectCommandsLayoutEXT =
+        (PFN_vkCreateIndirectCommandsLayoutEXT)pa(device, "vkCreateIndirectCommandsLayoutEXT");
+    dt->DestroyIndirectCommandsLayoutEXT =
+        (PFN_vkDestroyIndirectCommandsLayoutEXT)pa(device, "vkDestroyIndirectCommandsLayoutEXT");
+    dt->CreateIndirectExecutionSetEXT =
+        (PFN_vkCreateIndirectExecutionSetEXT)pa(device, "vkCreateIndirectExecutionSetEXT");
+    dt->DestroyIndirectExecutionSetEXT =
+        (PFN_vkDestroyIndirectExecutionSetEXT)pa(device, "vkDestroyIndirectExecutionSetEXT");
+    dt->UpdateIndirectExecutionSetPipelineEXT =
+        (PFN_vkUpdateIndirectExecutionSetPipelineEXT)pa(device, "vkUpdateIndirectExecutionSetPipelineEXT");
+    dt->UpdateIndirectExecutionSetShaderEXT =
+        (PFN_vkUpdateIndirectExecutionSetShaderEXT)pa(device, "vkUpdateIndirectExecutionSetShaderEXT");
     dt->CreateAccelerationStructureKHR =
         (PFN_vkCreateAccelerationStructureKHR)pa(device, "vkCreateAccelerationStructureKHR");
     dt->DestroyAccelerationStructureKHR =

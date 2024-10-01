@@ -304,6 +304,14 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkDeferredOperationKHR &a) {
 
 #if VK_USE_64_BIT_PTR_DEFINES
 
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPipelineBinaryKHR &a) {
+    os << global_name_resolver->GetObjectInfo(reinterpret_cast<uint64_t>(a));
+    return os;
+}
+#endif  // VK_USE_64_BIT_PTR_DEFINES
+
+#if VK_USE_64_BIT_PTR_DEFINES
+
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkDebugReportCallbackEXT &a) {
     os << global_name_resolver->GetObjectInfo(reinterpret_cast<uint64_t>(a));
     return os;
@@ -419,6 +427,22 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkOpticalFlowSessionNV &a) {
 #if VK_USE_64_BIT_PTR_DEFINES
 
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkShaderEXT &a) {
+    os << global_name_resolver->GetObjectInfo(reinterpret_cast<uint64_t>(a));
+    return os;
+}
+#endif  // VK_USE_64_BIT_PTR_DEFINES
+
+#if VK_USE_64_BIT_PTR_DEFINES
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkIndirectExecutionSetEXT &a) {
+    os << global_name_resolver->GetObjectInfo(reinterpret_cast<uint64_t>(a));
+    return os;
+}
+#endif  // VK_USE_64_BIT_PTR_DEFINES
+
+#if VK_USE_64_BIT_PTR_DEFINES
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkIndirectCommandsLayoutEXT &a) {
     os << global_name_resolver->GetObjectInfo(reinterpret_cast<uint64_t>(a));
     return os;
 }
@@ -1010,8 +1034,23 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkOpticalFlowSessionBindingPo
     return os;
 }
 
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkAntiLagModeAMD &t) {
+    os << string_VkAntiLagModeAMD(t);
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkAntiLagStageAMD &t) {
+    os << string_VkAntiLagStageAMD(t);
+    return os;
+}
+
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkShaderCodeTypeEXT &t) {
     os << string_VkShaderCodeTypeEXT(t);
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkDepthClampModeEXT &t) {
+    os << string_VkDepthClampModeEXT(t);
     return os;
 }
 
@@ -1047,6 +1086,16 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkCubicFilterWeightsQCOM &t) 
 
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkLayeredDriverUnderlyingApiMSFT &t) {
     os << string_VkLayeredDriverUnderlyingApiMSFT(t);
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkIndirectExecutionSetInfoTypeEXT &t) {
+    os << string_VkIndirectExecutionSetInfoTypeEXT(t);
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkIndirectCommandsTokenTypeEXT &t) {
+    os << string_VkIndirectCommandsTokenTypeEXT(t);
     return os;
 }
 

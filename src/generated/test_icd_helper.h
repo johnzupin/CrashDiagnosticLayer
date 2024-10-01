@@ -202,7 +202,9 @@ static const std::unordered_map<std::string, uint32_t> device_extension_map = {
     {VK_KHR_SHADER_MAXIMAL_RECONVERGENCE_EXTENSION_NAME, VK_KHR_SHADER_MAXIMAL_RECONVERGENCE_SPEC_VERSION},
     {VK_KHR_MAINTENANCE_5_EXTENSION_NAME, VK_KHR_MAINTENANCE_5_SPEC_VERSION},
     {VK_KHR_RAY_TRACING_POSITION_FETCH_EXTENSION_NAME, VK_KHR_RAY_TRACING_POSITION_FETCH_SPEC_VERSION},
+    {VK_KHR_PIPELINE_BINARY_EXTENSION_NAME, VK_KHR_PIPELINE_BINARY_SPEC_VERSION},
     {VK_KHR_COOPERATIVE_MATRIX_EXTENSION_NAME, VK_KHR_COOPERATIVE_MATRIX_SPEC_VERSION},
+    {VK_KHR_COMPUTE_SHADER_DERIVATIVES_EXTENSION_NAME, VK_KHR_COMPUTE_SHADER_DERIVATIVES_SPEC_VERSION},
     {VK_KHR_VIDEO_DECODE_AV1_EXTENSION_NAME, VK_KHR_VIDEO_DECODE_AV1_SPEC_VERSION},
     {VK_KHR_VIDEO_MAINTENANCE_1_EXTENSION_NAME, VK_KHR_VIDEO_MAINTENANCE_1_SPEC_VERSION},
     {VK_KHR_VERTEX_ATTRIBUTE_DIVISOR_EXTENSION_NAME, VK_KHR_VERTEX_ATTRIBUTE_DIVISOR_SPEC_VERSION},
@@ -448,6 +450,7 @@ static const std::unordered_map<std::string, uint32_t> device_extension_map = {
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
     {VK_ANDROID_EXTERNAL_FORMAT_RESOLVE_EXTENSION_NAME, VK_ANDROID_EXTERNAL_FORMAT_RESOLVE_SPEC_VERSION},
 #endif  // VK_USE_PLATFORM_ANDROID_KHR
+    {VK_AMD_ANTI_LAG_EXTENSION_NAME, VK_AMD_ANTI_LAG_SPEC_VERSION},
     {VK_EXT_SHADER_OBJECT_EXTENSION_NAME, VK_EXT_SHADER_OBJECT_SPEC_VERSION},
     {VK_QCOM_TILE_PROPERTIES_EXTENSION_NAME, VK_QCOM_TILE_PROPERTIES_SPEC_VERSION},
     {VK_SEC_AMIGO_PROFILING_EXTENSION_NAME, VK_SEC_AMIGO_PROFILING_SPEC_VERSION},
@@ -475,10 +478,13 @@ static const std::unordered_map<std::string, uint32_t> device_extension_map = {
     {VK_MSFT_LAYERED_DRIVER_EXTENSION_NAME, VK_MSFT_LAYERED_DRIVER_SPEC_VERSION},
     {VK_NV_DESCRIPTOR_POOL_OVERALLOCATION_EXTENSION_NAME, VK_NV_DESCRIPTOR_POOL_OVERALLOCATION_SPEC_VERSION},
     {VK_NV_RAW_ACCESS_CHAINS_EXTENSION_NAME, VK_NV_RAW_ACCESS_CHAINS_SPEC_VERSION},
+    {VK_NV_COMMAND_BUFFER_INHERITANCE_EXTENSION_NAME, VK_NV_COMMAND_BUFFER_INHERITANCE_SPEC_VERSION},
     {VK_NV_SHADER_ATOMIC_FLOAT16_VECTOR_EXTENSION_NAME, VK_NV_SHADER_ATOMIC_FLOAT16_VECTOR_SPEC_VERSION},
     {VK_EXT_SHADER_REPLICATED_COMPOSITES_EXTENSION_NAME, VK_EXT_SHADER_REPLICATED_COMPOSITES_SPEC_VERSION},
     {VK_NV_RAY_TRACING_VALIDATION_EXTENSION_NAME, VK_NV_RAY_TRACING_VALIDATION_SPEC_VERSION},
+    {VK_EXT_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME, VK_EXT_DEVICE_GENERATED_COMMANDS_SPEC_VERSION},
     {VK_MESA_IMAGE_ALIGNMENT_CONTROL_EXTENSION_NAME, VK_MESA_IMAGE_ALIGNMENT_CONTROL_SPEC_VERSION},
+    {VK_EXT_DEPTH_CLAMP_CONTROL_EXTENSION_NAME, VK_EXT_DEPTH_CLAMP_CONTROL_SPEC_VERSION},
     {VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, VK_KHR_ACCELERATION_STRUCTURE_SPEC_VERSION},
     {VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, VK_KHR_RAY_TRACING_PIPELINE_SPEC_VERSION},
     {VK_KHR_RAY_QUERY_EXTENSION_NAME, VK_KHR_RAY_QUERY_SPEC_VERSION},
@@ -1378,6 +1384,23 @@ static VKAPI_ATTR void VKAPI_CALL GetDeviceImageSubresourceLayoutKHR(VkDevice de
 static VKAPI_ATTR void VKAPI_CALL GetImageSubresourceLayout2KHR(VkDevice device, VkImage image,
                                                                 const VkImageSubresource2KHR* pSubresource,
                                                                 VkSubresourceLayout2KHR* pLayout);
+static VKAPI_ATTR VkResult VKAPI_CALL CreatePipelineBinariesKHR(VkDevice device,
+                                                                const VkPipelineBinaryCreateInfoKHR* pCreateInfo,
+                                                                const VkAllocationCallbacks* pAllocator,
+                                                                VkPipelineBinaryHandlesInfoKHR* pBinaries);
+static VKAPI_ATTR void VKAPI_CALL DestroyPipelineBinaryKHR(VkDevice device, VkPipelineBinaryKHR pipelineBinary,
+                                                           const VkAllocationCallbacks* pAllocator);
+static VKAPI_ATTR VkResult VKAPI_CALL GetPipelineKeyKHR(VkDevice device,
+                                                        const VkPipelineCreateInfoKHR* pPipelineCreateInfo,
+                                                        VkPipelineBinaryKeyKHR* pPipelineKey);
+static VKAPI_ATTR VkResult VKAPI_CALL GetPipelineBinaryDataKHR(VkDevice device,
+                                                               const VkPipelineBinaryDataInfoKHR* pInfo,
+                                                               VkPipelineBinaryKeyKHR* pPipelineBinaryKey,
+                                                               size_t* pPipelineBinaryDataSize,
+                                                               void* pPipelineBinaryData);
+static VKAPI_ATTR VkResult VKAPI_CALL ReleaseCapturedPipelineDataKHR(VkDevice device,
+                                                                     const VkReleaseCapturedPipelineDataInfoKHR* pInfo,
+                                                                     const VkAllocationCallbacks* pAllocator);
 static VKAPI_ATTR VkResult VKAPI_CALL GetPhysicalDeviceCooperativeMatrixPropertiesKHR(
     VkPhysicalDevice physicalDevice, uint32_t* pPropertyCount, VkCooperativeMatrixPropertiesKHR* pProperties);
 static VKAPI_ATTR void VKAPI_CALL CmdSetLineStippleKHR(VkCommandBuffer commandBuffer, uint32_t lineStippleFactor,
@@ -2086,6 +2109,7 @@ static VKAPI_ATTR VkResult VKAPI_CALL BindOpticalFlowSessionImageNV(VkDevice dev
                                                                     VkImageView view, VkImageLayout layout);
 static VKAPI_ATTR void VKAPI_CALL CmdOpticalFlowExecuteNV(VkCommandBuffer commandBuffer, VkOpticalFlowSessionNV session,
                                                           const VkOpticalFlowExecuteInfoNV* pExecuteInfo);
+static VKAPI_ATTR void VKAPI_CALL AntiLagUpdateAMD(VkDevice device, const VkAntiLagDataAMD* pData);
 static VKAPI_ATTR VkResult VKAPI_CALL CreateShadersEXT(VkDevice device, uint32_t createInfoCount,
                                                        const VkShaderCreateInfoEXT* pCreateInfos,
                                                        const VkAllocationCallbacks* pAllocator, VkShaderEXT* pShaders);
@@ -2095,6 +2119,9 @@ static VKAPI_ATTR VkResult VKAPI_CALL GetShaderBinaryDataEXT(VkDevice device, Vk
                                                              void* pData);
 static VKAPI_ATTR void VKAPI_CALL CmdBindShadersEXT(VkCommandBuffer commandBuffer, uint32_t stageCount,
                                                     const VkShaderStageFlagBits* pStages, const VkShaderEXT* pShaders);
+static VKAPI_ATTR void VKAPI_CALL CmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer,
+                                                           VkDepthClampModeEXT depthClampMode,
+                                                           const VkDepthClampRangeEXT* pDepthClampRange);
 static VKAPI_ATTR VkResult VKAPI_CALL GetFramebufferTilePropertiesQCOM(VkDevice device, VkFramebuffer framebuffer,
                                                                        uint32_t* pPropertiesCount,
                                                                        VkTilePropertiesQCOM* pProperties);
@@ -2117,6 +2144,32 @@ static VKAPI_ATTR void VKAPI_CALL CmdSetAttachmentFeedbackLoopEnableEXT(VkComman
 static VKAPI_ATTR VkResult VKAPI_CALL GetScreenBufferPropertiesQNX(VkDevice device, const struct _screen_buffer* buffer,
                                                                    VkScreenBufferPropertiesQNX* pProperties);
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
+static VKAPI_ATTR void VKAPI_CALL
+GetGeneratedCommandsMemoryRequirementsEXT(VkDevice device, const VkGeneratedCommandsMemoryRequirementsInfoEXT* pInfo,
+                                          VkMemoryRequirements2* pMemoryRequirements);
+static VKAPI_ATTR void VKAPI_CALL CmdPreprocessGeneratedCommandsEXT(
+    VkCommandBuffer commandBuffer, const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo,
+    VkCommandBuffer stateCommandBuffer);
+static VKAPI_ATTR void VKAPI_CALL CmdExecuteGeneratedCommandsEXT(
+    VkCommandBuffer commandBuffer, VkBool32 isPreprocessed, const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo);
+static VKAPI_ATTR VkResult VKAPI_CALL CreateIndirectCommandsLayoutEXT(
+    VkDevice device, const VkIndirectCommandsLayoutCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator,
+    VkIndirectCommandsLayoutEXT* pIndirectCommandsLayout);
+static VKAPI_ATTR void VKAPI_CALL DestroyIndirectCommandsLayoutEXT(VkDevice device,
+                                                                   VkIndirectCommandsLayoutEXT indirectCommandsLayout,
+                                                                   const VkAllocationCallbacks* pAllocator);
+static VKAPI_ATTR VkResult VKAPI_CALL CreateIndirectExecutionSetEXT(
+    VkDevice device, const VkIndirectExecutionSetCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator,
+    VkIndirectExecutionSetEXT* pIndirectExecutionSet);
+static VKAPI_ATTR void VKAPI_CALL DestroyIndirectExecutionSetEXT(VkDevice device,
+                                                                 VkIndirectExecutionSetEXT indirectExecutionSet,
+                                                                 const VkAllocationCallbacks* pAllocator);
+static VKAPI_ATTR void VKAPI_CALL UpdateIndirectExecutionSetPipelineEXT(
+    VkDevice device, VkIndirectExecutionSetEXT indirectExecutionSet, uint32_t executionSetWriteCount,
+    const VkWriteIndirectExecutionSetPipelineEXT* pExecutionSetWrites);
+static VKAPI_ATTR void VKAPI_CALL UpdateIndirectExecutionSetShaderEXT(
+    VkDevice device, VkIndirectExecutionSetEXT indirectExecutionSet, uint32_t executionSetWriteCount,
+    const VkWriteIndirectExecutionSetShaderEXT* pExecutionSetWrites);
 static VKAPI_ATTR VkResult VKAPI_CALL CreateAccelerationStructureKHR(
     VkDevice device, const VkAccelerationStructureCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator,
     VkAccelerationStructureKHR* pAccelerationStructure);
@@ -2579,6 +2632,11 @@ static const std::unordered_map<std::string, void*> name_to_func_ptr_map = {
     {"vkGetRenderingAreaGranularityKHR", (void*)GetRenderingAreaGranularityKHR},
     {"vkGetDeviceImageSubresourceLayoutKHR", (void*)GetDeviceImageSubresourceLayoutKHR},
     {"vkGetImageSubresourceLayout2KHR", (void*)GetImageSubresourceLayout2KHR},
+    {"vkCreatePipelineBinariesKHR", (void*)CreatePipelineBinariesKHR},
+    {"vkDestroyPipelineBinaryKHR", (void*)DestroyPipelineBinaryKHR},
+    {"vkGetPipelineKeyKHR", (void*)GetPipelineKeyKHR},
+    {"vkGetPipelineBinaryDataKHR", (void*)GetPipelineBinaryDataKHR},
+    {"vkReleaseCapturedPipelineDataKHR", (void*)ReleaseCapturedPipelineDataKHR},
     {"vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR", (void*)GetPhysicalDeviceCooperativeMatrixPropertiesKHR},
     {"vkCmdSetLineStippleKHR", (void*)CmdSetLineStippleKHR},
     {"vkGetPhysicalDeviceCalibrateableTimeDomainsKHR", (void*)GetPhysicalDeviceCalibrateableTimeDomainsKHR},
@@ -2891,10 +2949,12 @@ static const std::unordered_map<std::string, void*> name_to_func_ptr_map = {
     {"vkDestroyOpticalFlowSessionNV", (void*)DestroyOpticalFlowSessionNV},
     {"vkBindOpticalFlowSessionImageNV", (void*)BindOpticalFlowSessionImageNV},
     {"vkCmdOpticalFlowExecuteNV", (void*)CmdOpticalFlowExecuteNV},
+    {"vkAntiLagUpdateAMD", (void*)AntiLagUpdateAMD},
     {"vkCreateShadersEXT", (void*)CreateShadersEXT},
     {"vkDestroyShaderEXT", (void*)DestroyShaderEXT},
     {"vkGetShaderBinaryDataEXT", (void*)GetShaderBinaryDataEXT},
     {"vkCmdBindShadersEXT", (void*)CmdBindShadersEXT},
+    {"vkCmdSetDepthClampRangeEXT", (void*)CmdSetDepthClampRangeEXT},
     {"vkGetFramebufferTilePropertiesQCOM", (void*)GetFramebufferTilePropertiesQCOM},
     {"vkGetDynamicRenderingTilePropertiesQCOM", (void*)GetDynamicRenderingTilePropertiesQCOM},
     {"vkSetLatencySleepModeNV", (void*)SetLatencySleepModeNV},
@@ -2906,6 +2966,15 @@ static const std::unordered_map<std::string, void*> name_to_func_ptr_map = {
 #ifdef VK_USE_PLATFORM_SCREEN_QNX
     {"vkGetScreenBufferPropertiesQNX", (void*)GetScreenBufferPropertiesQNX},
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
+    {"vkGetGeneratedCommandsMemoryRequirementsEXT", (void*)GetGeneratedCommandsMemoryRequirementsEXT},
+    {"vkCmdPreprocessGeneratedCommandsEXT", (void*)CmdPreprocessGeneratedCommandsEXT},
+    {"vkCmdExecuteGeneratedCommandsEXT", (void*)CmdExecuteGeneratedCommandsEXT},
+    {"vkCreateIndirectCommandsLayoutEXT", (void*)CreateIndirectCommandsLayoutEXT},
+    {"vkDestroyIndirectCommandsLayoutEXT", (void*)DestroyIndirectCommandsLayoutEXT},
+    {"vkCreateIndirectExecutionSetEXT", (void*)CreateIndirectExecutionSetEXT},
+    {"vkDestroyIndirectExecutionSetEXT", (void*)DestroyIndirectExecutionSetEXT},
+    {"vkUpdateIndirectExecutionSetPipelineEXT", (void*)UpdateIndirectExecutionSetPipelineEXT},
+    {"vkUpdateIndirectExecutionSetShaderEXT", (void*)UpdateIndirectExecutionSetShaderEXT},
     {"vkCreateAccelerationStructureKHR", (void*)CreateAccelerationStructureKHR},
     {"vkDestroyAccelerationStructureKHR", (void*)DestroyAccelerationStructureKHR},
     {"vkCmdBuildAccelerationStructuresKHR", (void*)CmdBuildAccelerationStructuresKHR},
@@ -4485,6 +4554,29 @@ static VKAPI_ATTR void VKAPI_CALL GetDeviceImageSubresourceLayoutKHR(VkDevice de
 static VKAPI_ATTR void VKAPI_CALL GetImageSubresourceLayout2KHR(VkDevice device, VkImage image,
                                                                 const VkImageSubresource2KHR* pSubresource,
                                                                 VkSubresourceLayout2KHR* pLayout) {}
+
+static VKAPI_ATTR void VKAPI_CALL DestroyPipelineBinaryKHR(VkDevice device, VkPipelineBinaryKHR pipelineBinary,
+                                                           const VkAllocationCallbacks* pAllocator) {}
+
+static VKAPI_ATTR VkResult VKAPI_CALL GetPipelineKeyKHR(VkDevice device,
+                                                        const VkPipelineCreateInfoKHR* pPipelineCreateInfo,
+                                                        VkPipelineBinaryKeyKHR* pPipelineKey) {
+    return VK_SUCCESS;
+}
+
+static VKAPI_ATTR VkResult VKAPI_CALL GetPipelineBinaryDataKHR(VkDevice device,
+                                                               const VkPipelineBinaryDataInfoKHR* pInfo,
+                                                               VkPipelineBinaryKeyKHR* pPipelineBinaryKey,
+                                                               size_t* pPipelineBinaryDataSize,
+                                                               void* pPipelineBinaryData) {
+    return VK_SUCCESS;
+}
+
+static VKAPI_ATTR VkResult VKAPI_CALL ReleaseCapturedPipelineDataKHR(VkDevice device,
+                                                                     const VkReleaseCapturedPipelineDataInfoKHR* pInfo,
+                                                                     const VkAllocationCallbacks* pAllocator) {
+    return VK_SUCCESS;
+}
 
 static VKAPI_ATTR void VKAPI_CALL CmdSetLineStippleKHR(VkCommandBuffer commandBuffer, uint32_t lineStippleFactor,
                                                        uint16_t lineStipplePattern) {
@@ -6088,6 +6180,8 @@ static VKAPI_ATTR void VKAPI_CALL CmdOpticalFlowExecuteNV(VkCommandBuffer comman
     cb->Tracker().CmdOpticalFlowExecuteNV(commandBuffer, session, pExecuteInfo);
 }
 
+static VKAPI_ATTR void VKAPI_CALL AntiLagUpdateAMD(VkDevice device, const VkAntiLagDataAMD* pData) {}
+
 static VKAPI_ATTR VkResult VKAPI_CALL CreateShadersEXT(VkDevice device, uint32_t createInfoCount,
                                                        const VkShaderCreateInfoEXT* pCreateInfos,
                                                        const VkAllocationCallbacks* pAllocator, VkShaderEXT* pShaders) {
@@ -6110,6 +6204,13 @@ static VKAPI_ATTR void VKAPI_CALL CmdBindShadersEXT(VkCommandBuffer commandBuffe
                                                     const VkShaderStageFlagBits* pStages, const VkShaderEXT* pShaders) {
     auto* cb = reinterpret_cast<CommandBuffer*>(commandBuffer);
     cb->Tracker().CmdBindShadersEXT(commandBuffer, stageCount, pStages, pShaders);
+}
+
+static VKAPI_ATTR void VKAPI_CALL CmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer,
+                                                           VkDepthClampModeEXT depthClampMode,
+                                                           const VkDepthClampRangeEXT* pDepthClampRange) {
+    auto* cb = reinterpret_cast<CommandBuffer*>(commandBuffer);
+    cb->Tracker().CmdSetDepthClampRangeEXT(commandBuffer, depthClampMode, pDepthClampRange);
 }
 
 static VKAPI_ATTR VkResult VKAPI_CALL GetFramebufferTilePropertiesQCOM(VkDevice device, VkFramebuffer framebuffer,
@@ -6156,6 +6257,55 @@ static VKAPI_ATTR VkResult VKAPI_CALL GetScreenBufferPropertiesQNX(VkDevice devi
 }
 
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
+static VKAPI_ATTR void VKAPI_CALL
+GetGeneratedCommandsMemoryRequirementsEXT(VkDevice device, const VkGeneratedCommandsMemoryRequirementsInfoEXT* pInfo,
+                                          VkMemoryRequirements2* pMemoryRequirements) {}
+
+static VKAPI_ATTR void VKAPI_CALL CmdPreprocessGeneratedCommandsEXT(
+    VkCommandBuffer commandBuffer, const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo,
+    VkCommandBuffer stateCommandBuffer) {
+    auto* cb = reinterpret_cast<CommandBuffer*>(commandBuffer);
+    cb->Tracker().CmdPreprocessGeneratedCommandsEXT(commandBuffer, pGeneratedCommandsInfo, stateCommandBuffer);
+}
+
+static VKAPI_ATTR void VKAPI_CALL CmdExecuteGeneratedCommandsEXT(
+    VkCommandBuffer commandBuffer, VkBool32 isPreprocessed, const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo) {
+    auto* cb = reinterpret_cast<CommandBuffer*>(commandBuffer);
+    cb->Tracker().CmdExecuteGeneratedCommandsEXT(commandBuffer, isPreprocessed, pGeneratedCommandsInfo);
+}
+
+static VKAPI_ATTR VkResult VKAPI_CALL CreateIndirectCommandsLayoutEXT(
+    VkDevice device, const VkIndirectCommandsLayoutCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator,
+    VkIndirectCommandsLayoutEXT* pIndirectCommandsLayout) {
+    unique_lock_t lock(global_lock);
+    *pIndirectCommandsLayout = (VkIndirectCommandsLayoutEXT)global_unique_handle++;
+    return VK_SUCCESS;
+}
+
+static VKAPI_ATTR void VKAPI_CALL DestroyIndirectCommandsLayoutEXT(VkDevice device,
+                                                                   VkIndirectCommandsLayoutEXT indirectCommandsLayout,
+                                                                   const VkAllocationCallbacks* pAllocator) {}
+
+static VKAPI_ATTR VkResult VKAPI_CALL CreateIndirectExecutionSetEXT(
+    VkDevice device, const VkIndirectExecutionSetCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator,
+    VkIndirectExecutionSetEXT* pIndirectExecutionSet) {
+    unique_lock_t lock(global_lock);
+    *pIndirectExecutionSet = (VkIndirectExecutionSetEXT)global_unique_handle++;
+    return VK_SUCCESS;
+}
+
+static VKAPI_ATTR void VKAPI_CALL DestroyIndirectExecutionSetEXT(VkDevice device,
+                                                                 VkIndirectExecutionSetEXT indirectExecutionSet,
+                                                                 const VkAllocationCallbacks* pAllocator) {}
+
+static VKAPI_ATTR void VKAPI_CALL UpdateIndirectExecutionSetPipelineEXT(
+    VkDevice device, VkIndirectExecutionSetEXT indirectExecutionSet, uint32_t executionSetWriteCount,
+    const VkWriteIndirectExecutionSetPipelineEXT* pExecutionSetWrites) {}
+
+static VKAPI_ATTR void VKAPI_CALL UpdateIndirectExecutionSetShaderEXT(
+    VkDevice device, VkIndirectExecutionSetEXT indirectExecutionSet, uint32_t executionSetWriteCount,
+    const VkWriteIndirectExecutionSetShaderEXT* pExecutionSetWrites) {}
+
 static VKAPI_ATTR VkResult VKAPI_CALL CreateAccelerationStructureKHR(
     VkDevice device, const VkAccelerationStructureCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator,
     VkAccelerationStructureKHR* pAccelerationStructure) {

@@ -40,8 +40,6 @@ virtual VkResult PostCreateDevice(VkPhysicalDevice physicalDevice, const VkDevic
 
 virtual void PreDestroyDevice(VkDevice device, const VkAllocationCallbacks* pAllocator) {}
 
-virtual void PostDestroyDevice(VkDevice device, const VkAllocationCallbacks* pAllocator) {}
-
 virtual VkResult PostEnumerateDeviceExtensionProperties(VkPhysicalDevice physicalDevice, const char* pLayerName,
                                                         uint32_t* pPropertyCount, VkExtensionProperties* pProperties,
                                                         VkResult result) {
@@ -110,8 +108,8 @@ virtual VkResult PostCreateShaderModule(VkDevice device, const VkShaderModuleCre
     return result;
 }
 
-virtual void PostDestroyShaderModule(VkDevice device, VkShaderModule shaderModule,
-                                     const VkAllocationCallbacks* pAllocator) {}
+virtual void PreDestroyShaderModule(VkDevice device, VkShaderModule shaderModule,
+                                    const VkAllocationCallbacks* pAllocator) {}
 
 virtual VkResult PostCreateGraphicsPipelines(VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount,
                                              const VkGraphicsPipelineCreateInfo* pCreateInfos,
@@ -487,8 +485,6 @@ virtual void PreCmdDispatchBase(VkCommandBuffer commandBuffer, uint32_t baseGrou
 virtual void PostCmdDispatchBase(VkCommandBuffer commandBuffer, uint32_t baseGroupX, uint32_t baseGroupY,
                                  uint32_t baseGroupZ, uint32_t groupCountX, uint32_t groupCountY,
                                  uint32_t groupCountZ) {}
-
-virtual void PreGetDeviceQueue2(VkDevice device, const VkDeviceQueueInfo2* pQueueInfo, VkQueue* pQueue) {}
 
 virtual void PostGetDeviceQueue2(VkDevice device, const VkDeviceQueueInfo2* pQueueInfo, VkQueue* pQueue) {}
 
@@ -1741,9 +1737,29 @@ virtual void PreCmdBindShadersEXT(VkCommandBuffer commandBuffer, uint32_t stageC
 virtual void PostCmdBindShadersEXT(VkCommandBuffer commandBuffer, uint32_t stageCount,
                                    const VkShaderStageFlagBits* pStages, const VkShaderEXT* pShaders) {}
 
+virtual void PreCmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer, VkDepthClampModeEXT depthClampMode,
+                                         const VkDepthClampRangeEXT* pDepthClampRange) {}
+
+virtual void PostCmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer, VkDepthClampModeEXT depthClampMode,
+                                          const VkDepthClampRangeEXT* pDepthClampRange) {}
+
 virtual void PreCmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer, VkImageAspectFlags aspectMask) {}
 
 virtual void PostCmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer, VkImageAspectFlags aspectMask) {}
+
+virtual void PreCmdPreprocessGeneratedCommandsEXT(VkCommandBuffer commandBuffer,
+                                                  const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo,
+                                                  VkCommandBuffer stateCommandBuffer) {}
+
+virtual void PostCmdPreprocessGeneratedCommandsEXT(VkCommandBuffer commandBuffer,
+                                                   const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo,
+                                                   VkCommandBuffer stateCommandBuffer) {}
+
+virtual void PreCmdExecuteGeneratedCommandsEXT(VkCommandBuffer commandBuffer, VkBool32 isPreprocessed,
+                                               const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo) {}
+
+virtual void PostCmdExecuteGeneratedCommandsEXT(VkCommandBuffer commandBuffer, VkBool32 isPreprocessed,
+                                                const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo) {}
 
 virtual void PreCmdBuildAccelerationStructuresKHR(
     VkCommandBuffer commandBuffer, uint32_t infoCount, const VkAccelerationStructureBuildGeometryInfoKHR* pInfos,
