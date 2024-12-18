@@ -30,7 +30,7 @@
 namespace crash_diagnostic_layer {
 
 void InitInstanceDispatchTable(VkInstance instance, PFN_vkGetInstanceProcAddr pa, InstanceDispatchTable *dt) {
-    dt->CreateInstance = (PFN_vkCreateInstance)pa(instance, "vkCreateInstance");
+    dt->CreateInstance = (PFN_vkCreateInstance)pa(VK_NULL_HANDLE, "vkCreateInstance");
     dt->DestroyInstance = (PFN_vkDestroyInstance)pa(instance, "vkDestroyInstance");
     dt->EnumeratePhysicalDevices = (PFN_vkEnumeratePhysicalDevices)pa(instance, "vkEnumeratePhysicalDevices");
     dt->GetPhysicalDeviceFeatures = (PFN_vkGetPhysicalDeviceFeatures)pa(instance, "vkGetPhysicalDeviceFeatures");
@@ -46,7 +46,7 @@ void InitInstanceDispatchTable(VkInstance instance, PFN_vkGetInstanceProcAddr pa
     dt->GetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)pa(instance, "vkGetInstanceProcAddr");
     dt->CreateDevice = (PFN_vkCreateDevice)pa(instance, "vkCreateDevice");
     dt->EnumerateInstanceExtensionProperties =
-        (PFN_vkEnumerateInstanceExtensionProperties)pa(instance, "vkEnumerateInstanceExtensionProperties");
+        (PFN_vkEnumerateInstanceExtensionProperties)pa(VK_NULL_HANDLE, "vkEnumerateInstanceExtensionProperties");
     dt->EnumerateDeviceExtensionProperties =
         (PFN_vkEnumerateDeviceExtensionProperties)pa(instance, "vkEnumerateDeviceExtensionProperties");
     dt->EnumerateInstanceLayerProperties =
@@ -267,6 +267,9 @@ void InitInstanceDispatchTable(VkInstance instance, PFN_vkGetInstanceProcAddr pa
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
     dt->GetPhysicalDeviceOpticalFlowImageFormatsNV =
         (PFN_vkGetPhysicalDeviceOpticalFlowImageFormatsNV)pa(instance, "vkGetPhysicalDeviceOpticalFlowImageFormatsNV");
+    dt->GetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV =
+        (PFN_vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV)pa(
+            instance, "vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV");
 };
 
 void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, DeviceDispatchTable *dt) {
@@ -470,6 +473,30 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
         (PFN_vkGetDeviceImageMemoryRequirements)pa(device, "vkGetDeviceImageMemoryRequirements");
     dt->GetDeviceImageSparseMemoryRequirements =
         (PFN_vkGetDeviceImageSparseMemoryRequirements)pa(device, "vkGetDeviceImageSparseMemoryRequirements");
+    dt->CmdSetLineStipple = (PFN_vkCmdSetLineStipple)pa(device, "vkCmdSetLineStipple");
+    dt->MapMemory2 = (PFN_vkMapMemory2)pa(device, "vkMapMemory2");
+    dt->UnmapMemory2 = (PFN_vkUnmapMemory2)pa(device, "vkUnmapMemory2");
+    dt->CmdBindIndexBuffer2 = (PFN_vkCmdBindIndexBuffer2)pa(device, "vkCmdBindIndexBuffer2");
+    dt->GetRenderingAreaGranularity = (PFN_vkGetRenderingAreaGranularity)pa(device, "vkGetRenderingAreaGranularity");
+    dt->GetDeviceImageSubresourceLayout =
+        (PFN_vkGetDeviceImageSubresourceLayout)pa(device, "vkGetDeviceImageSubresourceLayout");
+    dt->GetImageSubresourceLayout2 = (PFN_vkGetImageSubresourceLayout2)pa(device, "vkGetImageSubresourceLayout2");
+    dt->CmdPushDescriptorSet = (PFN_vkCmdPushDescriptorSet)pa(device, "vkCmdPushDescriptorSet");
+    dt->CmdPushDescriptorSetWithTemplate =
+        (PFN_vkCmdPushDescriptorSetWithTemplate)pa(device, "vkCmdPushDescriptorSetWithTemplate");
+    dt->CmdSetRenderingAttachmentLocations =
+        (PFN_vkCmdSetRenderingAttachmentLocations)pa(device, "vkCmdSetRenderingAttachmentLocations");
+    dt->CmdSetRenderingInputAttachmentIndices =
+        (PFN_vkCmdSetRenderingInputAttachmentIndices)pa(device, "vkCmdSetRenderingInputAttachmentIndices");
+    dt->CmdBindDescriptorSets2 = (PFN_vkCmdBindDescriptorSets2)pa(device, "vkCmdBindDescriptorSets2");
+    dt->CmdPushConstants2 = (PFN_vkCmdPushConstants2)pa(device, "vkCmdPushConstants2");
+    dt->CmdPushDescriptorSet2 = (PFN_vkCmdPushDescriptorSet2)pa(device, "vkCmdPushDescriptorSet2");
+    dt->CmdPushDescriptorSetWithTemplate2 =
+        (PFN_vkCmdPushDescriptorSetWithTemplate2)pa(device, "vkCmdPushDescriptorSetWithTemplate2");
+    dt->CopyMemoryToImage = (PFN_vkCopyMemoryToImage)pa(device, "vkCopyMemoryToImage");
+    dt->CopyImageToMemory = (PFN_vkCopyImageToMemory)pa(device, "vkCopyImageToMemory");
+    dt->CopyImageToImage = (PFN_vkCopyImageToImage)pa(device, "vkCopyImageToImage");
+    dt->TransitionImageLayout = (PFN_vkTransitionImageLayout)pa(device, "vkTransitionImageLayout");
     dt->CreateSwapchainKHR = (PFN_vkCreateSwapchainKHR)pa(device, "vkCreateSwapchainKHR");
     dt->DestroySwapchainKHR = (PFN_vkDestroySwapchainKHR)pa(device, "vkDestroySwapchainKHR");
     dt->GetSwapchainImagesKHR = (PFN_vkGetSwapchainImagesKHR)pa(device, "vkGetSwapchainImagesKHR");
@@ -600,8 +627,6 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
     dt->CmdPipelineBarrier2KHR = (PFN_vkCmdPipelineBarrier2KHR)pa(device, "vkCmdPipelineBarrier2KHR");
     dt->CmdWriteTimestamp2KHR = (PFN_vkCmdWriteTimestamp2KHR)pa(device, "vkCmdWriteTimestamp2KHR");
     dt->QueueSubmit2KHR = (PFN_vkQueueSubmit2KHR)pa(device, "vkQueueSubmit2KHR");
-    dt->CmdWriteBufferMarker2AMD = (PFN_vkCmdWriteBufferMarker2AMD)pa(device, "vkCmdWriteBufferMarker2AMD");
-    dt->GetQueueCheckpointData2NV = (PFN_vkGetQueueCheckpointData2NV)pa(device, "vkGetQueueCheckpointData2NV");
     dt->CmdCopyBuffer2KHR = (PFN_vkCmdCopyBuffer2KHR)pa(device, "vkCmdCopyBuffer2KHR");
     dt->CmdCopyImage2KHR = (PFN_vkCmdCopyImage2KHR)pa(device, "vkCmdCopyImage2KHR");
     dt->CmdCopyBufferToImage2KHR = (PFN_vkCmdCopyBufferToImage2KHR)pa(device, "vkCmdCopyBufferToImage2KHR");
@@ -657,6 +682,7 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
     dt->DestroyCuFunctionNVX = (PFN_vkDestroyCuFunctionNVX)pa(device, "vkDestroyCuFunctionNVX");
     dt->CmdCuLaunchKernelNVX = (PFN_vkCmdCuLaunchKernelNVX)pa(device, "vkCmdCuLaunchKernelNVX");
     dt->GetImageViewHandleNVX = (PFN_vkGetImageViewHandleNVX)pa(device, "vkGetImageViewHandleNVX");
+    dt->GetImageViewHandle64NVX = (PFN_vkGetImageViewHandle64NVX)pa(device, "vkGetImageViewHandle64NVX");
     dt->GetImageViewAddressNVX = (PFN_vkGetImageViewAddressNVX)pa(device, "vkGetImageViewAddressNVX");
     dt->CmdDrawIndirectCountAMD = (PFN_vkCmdDrawIndirectCountAMD)pa(device, "vkCmdDrawIndirectCountAMD");
     dt->CmdDrawIndexedIndirectCountAMD =
@@ -764,6 +790,7 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
     dt->GetMemoryHostPointerPropertiesEXT =
         (PFN_vkGetMemoryHostPointerPropertiesEXT)pa(device, "vkGetMemoryHostPointerPropertiesEXT");
     dt->CmdWriteBufferMarkerAMD = (PFN_vkCmdWriteBufferMarkerAMD)pa(device, "vkCmdWriteBufferMarkerAMD");
+    dt->CmdWriteBufferMarker2AMD = (PFN_vkCmdWriteBufferMarker2AMD)pa(device, "vkCmdWriteBufferMarker2AMD");
     dt->GetCalibratedTimestampsEXT = (PFN_vkGetCalibratedTimestampsEXT)pa(device, "vkGetCalibratedTimestampsEXT");
     dt->CmdDrawMeshTasksNV = (PFN_vkCmdDrawMeshTasksNV)pa(device, "vkCmdDrawMeshTasksNV");
     dt->CmdDrawMeshTasksIndirectNV = (PFN_vkCmdDrawMeshTasksIndirectNV)pa(device, "vkCmdDrawMeshTasksIndirectNV");
@@ -774,6 +801,7 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
     dt->CmdSetExclusiveScissorNV = (PFN_vkCmdSetExclusiveScissorNV)pa(device, "vkCmdSetExclusiveScissorNV");
     dt->CmdSetCheckpointNV = (PFN_vkCmdSetCheckpointNV)pa(device, "vkCmdSetCheckpointNV");
     dt->GetQueueCheckpointDataNV = (PFN_vkGetQueueCheckpointDataNV)pa(device, "vkGetQueueCheckpointDataNV");
+    dt->GetQueueCheckpointData2NV = (PFN_vkGetQueueCheckpointData2NV)pa(device, "vkGetQueueCheckpointData2NV");
     dt->InitializePerformanceApiINTEL =
         (PFN_vkInitializePerformanceApiINTEL)pa(device, "vkInitializePerformanceApiINTEL");
     dt->UninitializePerformanceApiINTEL =

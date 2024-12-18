@@ -19,16 +19,11 @@
 #include "util.h"
 #include <regex>
 
-#if defined(WIN32)
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
 // For OutputDebugString
 #include <process.h>
 #include <windows.h>
-#else
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/syscall.h>
-#include <sys/types.h>
-#include <sys/un.h>
+#include <direct.h>
 #endif
 
 #include <algorithm>
@@ -43,10 +38,6 @@
 #include <vulkan/vk_enum_string_helper.h>
 
 #include <yaml-cpp/emitter.h>
-
-#if defined(WIN32)
-#include <direct.h>
-#endif
 
 namespace crash_diagnostic_layer {
 
@@ -218,11 +209,7 @@ Context::Context(const VkInstanceCreateInfo* pCreateInfo, const VkAllocationCall
         if (!settings_->output_path.empty()) {
             output_path_ = settings_->output_path;
         } else {
-#if defined(WIN32)
-            output_path_ = getenv("USERPROFILE");
-#else
-            output_path_ = getenv("HOME");
-#endif
+            output_path_ = System::GetOutputBasePath();
             output_path_ /= "cdl";
         }
 
@@ -302,22 +289,10 @@ Context::Context(const VkInstanceCreateInfo* pCreateInfo, const VkAllocationCall
         }
     }
 
-    // manage the watchdog thread
-    {
-        UpdateWatchdog();
-        if (settings_->watchdog_timer_ms > 0) {
-            StartWatchdogTimer();
-            Log().Info("Begin Watchdog: %" PRId64 "ms", settings_->watchdog_timer_ms);
-        }
-    }
-
     vkuDestroyLayerSettingSet(layer_setting_set, nullptr);
 }
 
-Context::~Context() {
-    StopWatchdogTimer();
-    logger_.CloseLogFile();
-}
+Context::~Context() { logger_.CloseLogFile(); }
 
 Context::DevicePtr Context::GetDevice(VkDevice device) {
     std::lock_guard<std::mutex> lock(devices_mutex_);
@@ -379,62 +354,6 @@ Context::ConstDevicePtr Context::GetQueueDevice(VkQueue queue) const {
     std::lock_guard<std::mutex> lock(devices_mutex_);
     auto iter = devices_.find(device);
     return iter != devices_.end() ? iter->second : nullptr;
-}
-
-void Context::StartWatchdogTimer() {
-    // Start up the watchdog timer thread.
-    watchdog_running_ = true;
-    watchdog_thread_ = std::thread([&]() { this->WatchdogTimer(); });
-}
-void Context::UpdateWatchdog() {
-    using namespace std::chrono;
-    last_submit_time_ = duration_cast<milliseconds>(high_resolution_clock::now().time_since_epoch()).count();
-}
-
-void Context::StopWatchdogTimer() {
-    if (watchdog_running_) {
-        Log().Info("Stopping Watchdog");
-        watchdog_running_ = false;  // TODO: condition variable that waits
-    }
-    // make sure the watchdog thread is joined even if it quit on its own.
-    if (watchdog_thread_.joinable()) {
-        watchdog_thread_.join();
-        Log().Info("Watchdog Stopped");
-    }
-}
-
-void Context::WatchdogTimer() {
-    uint64_t test_interval_us = std::min((uint64_t)(1000 * 1000), settings_->watchdog_timer_ms * 500);
-    while (watchdog_running_) {
-        // TODO: condition variable that waits
-        std::this_thread::sleep_for(std::chrono::microseconds(test_interval_us));
-        if (!watchdog_running_) {
-            break;
-        }
-
-        auto now = std::chrono::duration_cast<std::chrono::milliseconds>(
-                       std::chrono::high_resolution_clock::now().time_since_epoch())
-                       .count();
-        auto ms = (int64_t)(now - last_submit_time_);
-
-        if (ms > (int64_t)settings_->watchdog_timer_ms) {
-            Log().Info("CDL: Watchdog check failed, no submit in %" PRId64 "ms", ms);
-
-            auto devs = GetAllDevices();
-            bool dump_prologue = true;
-            auto file = OpenDumpFile();
-            YAML::Emitter os(file.is_open() ? file : std::cerr);
-
-            for (auto& device : devs) {
-                device->WatchdogTimeout(dump_prologue, os);
-                dump_prologue = false;
-            }
-
-            // Quit the thread after a hang is detected, it is unlikely that further dumps will
-            // show anything more useful than the first one.
-            watchdog_running_ = false;
-        }
-    }
 }
 
 void Context::PreApiFunction(const char* api_name) {
@@ -504,10 +423,22 @@ static DeviceExtensionsPresent DecodeExtensionStrings(uint32_t count, const char
 
 const VkDeviceCreateInfo* Context::GetModifiedDeviceCreateInfo(VkPhysicalDevice physicalDevice,
                                                                const VkDeviceCreateInfo* pCreateInfo) {
+    DeviceExtensionsPresent extensions_present{};
+    {
+        // Get the list of device extensions.
+        uint32_t extension_count = 0;
+        std::vector<VkExtensionProperties> properties;
+        Dispatch().EnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extension_count, nullptr);
+        properties.resize(extension_count);
+        Dispatch().EnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extension_count, properties.data());
+
+        for (const auto& prop : properties) {
+            DecodeExtensionString(extensions_present, prop.extensionName);
+        }
+    }
     auto extensions_enabled =
         DecodeExtensionStrings(pCreateInfo->enabledExtensionCount, pCreateInfo->ppEnabledExtensionNames);
 
-    const auto& extensions_present = extensions_of_interest_present_[physicalDevice];
     auto device_ci = std::make_unique<DeviceCreateInfo>();
     device_ci->original.initialize(pCreateInfo);
     device_ci->modified = device_ci->original;
@@ -539,12 +470,10 @@ const VkDeviceCreateInfo* Context::GetModifiedDeviceCreateInfo(VkPhysicalDevice 
     } else {
         Log().Warning("No VK_AMD_buffer_marker extension, semaphore tracking will be disabled.");
     }
-
     if (!extensions_present.nv_device_diagnostic_checkpoints && !extensions_present.amd_buffer_marker) {
-        Log().Error(
-            "No VK_NV_device_diagnostic_checkpoints or VK_AMD_buffer_marker extension, progression tracking will "
-            "be "
-            "disabled. ");
+        Log().Warning(
+            "No VK_NV_device_diagnostic_checkpoints or VK_AMD_buffer_marker extension, progression tracking will be "
+            "disabled.");
     }
     if (extensions_present.ext_device_fault) {
         if (!extensions_enabled.ext_device_fault) {
@@ -552,7 +481,12 @@ const VkDeviceCreateInfo* Context::GetModifiedDeviceCreateInfo(VkPhysicalDevice 
             // Query the feature so that we know if vendor data is supported
             auto ext_device_fault = vku::InitStruct<VkPhysicalDeviceFaultFeaturesEXT>(nullptr);
             auto features2 = vku::InitStruct<VkPhysicalDeviceFeatures2>(&ext_device_fault);
-            Dispatch().GetPhysicalDeviceFeatures2(physicalDevice, &features2);
+            if (modified_create_info_.pApplicationInfo &&
+                modified_create_info_.pApplicationInfo->apiVersion >= VK_API_VERSION_1_1) {
+                Dispatch().GetPhysicalDeviceFeatures2(physicalDevice, &features2);
+            } else {
+                Dispatch().GetPhysicalDeviceFeatures2KHR(physicalDevice, &features2);
+            }
 
             vku::AddToPnext(device_ci->modified, ext_device_fault);
             vku::AddExtension(device_ci->modified, VK_EXT_DEVICE_FAULT_EXTENSION_NAME);
@@ -591,8 +525,6 @@ const VkDeviceCreateInfo* Context::GetModifiedDeviceCreateInfo(VkPhysicalDevice 
             "No VK_EXT_device_address_binding_report extension, DeviceAddress information will not be available.");
     }
 
-    extensions_of_interest_enabled_[physicalDevice] = std::move(extensions_enabled);
-
     // save the raw ptr before std::move of the std::unique_ptr
     const auto* ci_ptr = device_ci->modified.ptr();
     {
@@ -603,15 +535,10 @@ const VkDeviceCreateInfo* Context::GetModifiedDeviceCreateInfo(VkPhysicalDevice 
     return ci_ptr;
 }
 
-void Context::DumpDeviceExecutionState(Device& device) {
+void Context::DumpDeviceExecutionState(Device& device, CrashSource cs) {
     auto file = OpenDumpFile();
     YAML::Emitter os(file.is_open() ? file : std::cerr);
-    DumpDeviceExecutionState(device, {}, true, kDeviceLostError, os);
-}
-
-void Context::DumpDeviceExecutionState(Device& device, bool dump_prologue, CrashSource crash_source,
-                                       YAML::Emitter& os) {
-    DumpDeviceExecutionState(device, {}, dump_prologue, crash_source, os);
+    DumpDeviceExecutionState(device, {}, true, cs, os);
 }
 
 void Context::DumpDeviceExecutionState(Device& device, const std::string& error_report, bool dump_prologue,
@@ -660,7 +587,11 @@ void Context::DumpReportPrologue(YAML::Emitter& os) {
     os << YAML::Key << "osName" << YAML::Value << system_.GetOsName();
     os << YAML::Key << "osVersion" << YAML::Value << system_.GetOsVersion();
     os << YAML::Key << "osBitdepth" << YAML::Value << system_.GetOsBitdepth();
-    os << YAML::Key << "osAdditional" << YAML::Value << system_.GetOsAdditionalInfo();
+    os << YAML::Key << "osAdditional" << YAML::Value << YAML::BeginMap;
+    for (const auto& item : system_.GetOsAdditionalInfo()) {
+        os << YAML::Key << item.first << YAML::Value << item.second;
+    }
+    os << YAML::EndMap;
     os << YAML::Key << "cpuName" << YAML::Value << system_.GetHwCpuName();
     os << YAML::Key << "numCpus" << YAML::Value << system_.GetHwNumCpus();
     os << YAML::Key << "totalRam" << YAML::Value << system_.GetHwTotalRam();
@@ -717,23 +648,28 @@ std::ofstream Context::OpenDumpFile() {
     dump_file_path /= ss_name.str();
     total_logs_++;
 
-#if !defined(WIN32)
     // Create a symlink from the generated log file.
+#if !defined(VK_USE_PLATFORM_WIN32_KHR)
     std::filesystem::path symlink_path(base_output_path_);
     symlink_path /= "cdl_dump.yaml.symlink";
-    remove(symlink_path.string().c_str());
-    symlink(dump_file_path.string().c_str(), symlink_path.string().c_str());
+    try {
+        std::filesystem::remove(symlink_path);
+        std::filesystem::create_symlink(dump_file_path, symlink_path);
+    } catch (std::filesystem::filesystem_error& err) {
+        Log().Warning("symlink %s -> %s failed: %s", dump_file_path.string().c_str(), symlink_path.string().c_str(),
+                      err.what());
+    }
 #endif
 
     std::stringstream ss;
     ss << "Device error encountered and log being recorded" << std::endl;
     ;
     ss << "\tOutput written to: " << dump_file_path << std::endl;
-#if !defined(WIN32)
+#if !defined(VK_USE_PLATFORM_WIN32_KHR)
     ss << "\tSymlink to output: " << symlink_path << std::endl;
 #endif
     ss << "----------------------------------------------------------------" << std::endl;
-#if defined(WIN32)
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
     OutputDebugString(ss.str().c_str());
 #endif
     Log().Error(ss.str());
@@ -803,7 +739,7 @@ VkResult Context::PostCreateInstance(const VkInstanceCreateInfo* pCreateInfo, co
         application_info_->apiVersion = pCreateInfo->pApplicationInfo->apiVersion;
     }
     // This messenger is for messages we recieve from the ICD for device address binding events.
-    if (VK_NULL_HANDLE == utils_messenger_) {
+    if (VK_NULL_HANDLE == utils_messenger_ && instance_dispatch_table_.CreateDebugUtilsMessengerEXT) {
         VkDebugUtilsMessengerCreateInfoEXT messenger_create_info = {
             VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
             nullptr,
@@ -825,22 +761,6 @@ void Context::PreDestroyInstance(VkInstance instance, const VkAllocationCallback
         instance_dispatch_table_.DestroyDebugUtilsMessengerEXT(vk_instance_, utils_messenger_, nullptr);
         utils_messenger_ = VK_NULL_HANDLE;
     }
-}
-
-VkResult Context::PostEnumerateDeviceExtensionProperties(VkPhysicalDevice physicalDevice, const char* pLayerName,
-                                                         uint32_t* pPropertyCount, VkExtensionProperties* pProperties,
-                                                         VkResult result) {
-    if (result == VK_SUCCESS && pPropertyCount != nullptr && pProperties != nullptr && *pPropertyCount > 0) {
-        DeviceExtensionsPresent extensions_present{};
-
-        // Get the list of device extensions.
-        uint32_t extension_count = *pPropertyCount;
-        for (uint32_t i = 0; i < extension_count; ++i) {
-            DecodeExtensionString(extensions_present, pProperties[i].extensionName);
-        }
-        extensions_of_interest_present_[physicalDevice] = std::move(extensions_present);
-    }
-    return VK_SUCCESS;
 }
 
 VkResult Context::PostCreateDevice(VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo* pCreateInfo,
@@ -921,7 +841,7 @@ VkResult Context::PostDeviceWaitIdle(VkDevice device, VkResult result) {
     if (IsVkError(result) || result == VK_TIMEOUT) {
         device_state->DeviceFault();
     } else {
-        UpdateWatchdog();
+        device_state->UpdateWatchdog();
     }
 
     return result;
@@ -948,7 +868,7 @@ VkResult Context::PostQueueWaitIdle(VkQueue queue, VkResult result) {
     if (IsVkError(result) || result == VK_TIMEOUT) {
         device_state->DeviceFault();
     } else {
-        UpdateWatchdog();
+        device_state->UpdateWatchdog();
     }
 
     return result;
@@ -956,8 +876,8 @@ VkResult Context::PostQueueWaitIdle(VkQueue queue, VkResult result) {
 
 VkResult Context::PreQueuePresentKHR(VkQueue queue, VkPresentInfoKHR const* pPresentInfo) {
     PreApiFunction("vkQueuePresentKHR");
-    UpdateWatchdog();
     auto device_state = GetQueueDevice(queue);
+    device_state->UpdateWatchdog();
     device_state->UpdateIdleState();
     return VK_SUCCESS;
 }
@@ -996,7 +916,7 @@ VkResult Context::PostWaitForFences(VkDevice device, uint32_t fenceCount, VkFenc
     if (IsVkError(result)) {
         device_state->DeviceFault();
     } else if (result == VK_SUCCESS) {
-        UpdateWatchdog();
+        device_state->UpdateWatchdog();
     }
 
     return result;
@@ -1289,17 +1209,8 @@ VkResult Context::PreWaitSemaphores(VkDevice device, const VkSemaphoreWaitInfoKH
         result = VK_ERROR_DEVICE_LOST;
     }
     if (settings_->track_semaphores) {
-#ifdef __linux__
-        pid_t tid = static_cast<pid_t>(syscall(SYS_gettid));
-#else
-        int tid = 0;
-#endif
-
-#ifdef WIN32
-        int pid = _getpid();
-#else
-        pid_t pid = getpid();
-#endif
+        auto tid = System::GetTid();
+        auto pid = System::GetPid();
 
         device_state->GetSemaphoreTracker()->BeginWaitOnSemaphores(pid, tid, pWaitInfo);
 
@@ -1328,17 +1239,8 @@ VkResult Context::PostWaitSemaphores(VkDevice device, const VkSemaphoreWaitInfoK
         return result;
     }
     if (settings_->track_semaphores && (result == VK_SUCCESS || result == VK_TIMEOUT)) {
-#ifdef __linux__
-        pid_t tid = static_cast<pid_t>(syscall(SYS_gettid));
-#else
-        int tid = 0;
-#endif
-
-#ifdef WIN32
-        int pid = _getpid();
-#else
-        pid_t pid = getpid();
-#endif
+        auto tid = System::GetTid();
+        auto pid = System::GetPid();
         {
             // Update semaphore values
             uint64_t semaphore_value;
@@ -1445,8 +1347,8 @@ VkResult Context::PreResetCommandBuffer(VkCommandBuffer commandBuffer, VkCommand
 
 VkResult Context::QueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence) {
     PreApiFunction("vkQueueSubmit");
-    UpdateWatchdog();
     auto device_state = GetQueueDevice(queue);
+    device_state->UpdateWatchdog();
     auto queue_state = device_state->GetQueue(queue);
     auto result = queue_state->Submit(submitCount, pSubmits, fence);
     PostApiFunction("vkQueueSubmit", result);
@@ -1458,8 +1360,8 @@ VkResult Context::QueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmi
 
 VkResult Context::QueueSubmit2(VkQueue queue, uint32_t submitCount, const VkSubmitInfo2* pSubmits, VkFence fence) {
     PreApiFunction("vkQueueSubmit2");
-    UpdateWatchdog();
     auto device_state = GetQueueDevice(queue);
+    device_state->UpdateWatchdog();
     auto queue_state = device_state->GetQueue(queue);
     auto result = queue_state->Submit2(submitCount, pSubmits, fence);
     PostApiFunction("vkQueueSubmit2", result);
@@ -1471,8 +1373,8 @@ VkResult Context::QueueSubmit2(VkQueue queue, uint32_t submitCount, const VkSubm
 
 VkResult Context::QueueSubmit2KHR(VkQueue queue, uint32_t submitCount, const VkSubmitInfo2* pSubmits, VkFence fence) {
     PreApiFunction("vkQueueSubmit2KHR");
-    UpdateWatchdog();
     auto device_state = GetQueueDevice(queue);
+    device_state->UpdateWatchdog();
     auto queue_state = device_state->GetQueue(queue);
     auto result = queue_state->Submit2(submitCount, pSubmits, fence);
     PostApiFunction("vkQueueSubmit2KHR", result);
@@ -1485,8 +1387,8 @@ VkResult Context::QueueSubmit2KHR(VkQueue queue, uint32_t submitCount, const VkS
 VkResult Context::QueueBindSparse(VkQueue queue, uint32_t bindInfoCount, VkBindSparseInfo const* pBindInfo,
                                   VkFence fence) {
     PreApiFunction("vkQueueBindSparse");
-    UpdateWatchdog();
     auto device_state = GetQueueDevice(queue);
+    device_state->UpdateWatchdog();
     auto queue_state = device_state->GetQueue(queue);
     auto result = queue_state->BindSparse(bindInfoCount, pBindInfo, fence);
     PostApiFunction("vkQueueBindSparse", result);
