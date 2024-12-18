@@ -4,18 +4,109 @@ Upstream-Contact: <preferred name and address to reach the upstream project>
 Source: <url://example.com>
 
 Files: *
-Copyright: <years> <put author's name and email here>
-           <years> <likewise for another author>
+Copyright: <years> <likewise for another author>
+           <years> <put author's name and email here>
+           after any existing copyrights
+License: <special license>
+
+Files: .github/*
+       CMakeLists.txt
+       LICENSE
+       scripts/CMakeLists.txt
+       scripts/android.py
+       scripts/check_code_format.py
+       scripts/clang-format-diff.py
+       scripts/common_ci.py
+       scripts/common_codegen.py
+       scripts/generate_source.py
+       scripts/generators/*
+       scripts/tests.py
+       scripts/update_deps.py
+       src/CMakeLists.txt
+       src/VkLayer_crash_diagnostic.def
+       src/android/*
+       src/cdl.cpp
+       src/cdl.h
+       src/cdl_log_format.yaml
+       src/checkpoint.cpp
+       src/checkpoint.h
+       src/command.cpp
+       src/command.h
+       src/command_buffer_tracker.cpp
+       src/command_buffer_tracker.h
+       src/command_pool.cpp
+       src/command_pool.h
+       src/descriptor_set.cpp
+       src/descriptor_set.h
+       src/device.cpp
+       src/device.h
+       src/generated/*
+       src/layer_base.cpp
+       src/layer_base.h
+       src/linear_allocator.h
+       src/logger.cpp
+       src/logger.h
+       src/marker.cpp
+       src/marker.h
+       src/object_name_db.cpp
+       src/object_name_db.h
+       src/pipeline.cpp
+       src/pipeline.h
+       src/queue.cpp
+       src/queue.h
+       src/semaphore_tracker.cpp
+       src/semaphore_tracker.h
+       src/shader_module.cpp
+       src/shader_module.h
+       src/spirv_parse.h
+       src/system.cpp
+       src/system.h
+       src/util.h
+       src/watchdog.cpp
+       src/watchdog.h
+       tests/CMakeLists.txt
+       tests/android/CMakeLists.txt
+       tests/framework/*
+       tests/icd/CDL_Test_ICD.def
+       tests/icd/CMakeLists.txt
+       tests/icd/test_icd.cpp
+       tests/icd/test_icd.h
+       tests/icd/test_icd_command.cpp
+       tests/icd/test_icd_command.h
+       tests/icd/test_icd_device.cpp
+       tests/icd/test_icd_device.h
+       tests/icd/test_icd_fault_info.h
+       tests/icd/test_icd_fence.cpp
+       tests/icd/test_icd_fence.h
+       tests/icd/test_icd_memory.h
+       tests/icd/test_icd_queue.cpp
+       tests/icd/test_icd_queue.h
+       tests/icd/test_icd_semaphore.cpp
+       tests/icd/test_icd_semaphore.h
+       tests/unit/*
+Copyright: 2018-2024, Google Inc
+           2015-2023, Google, Inc
+           2014-2024, LunarG, Inc
+           2023-2024, RasterGrid Kft
+           2017, The Glslang Authors
+           2015-2024, The Khronos Group Inc
+           2014-2024, Valve Corporation
+           dates for modified files
+License: Apache-2
+
+Files: debian/*
+Copyright: 2024, LunarG Inc <johnz@lunarg.com>
+License: GPL-2+
+
 License: <special license>
  <Put the license of the package here indented by 1 space>
  <This follows the format of Description: lines in control file>
  .
  <Including paragraphs>
 
-# If you want to use GPL v2 or later for the /debian/* files use
-# the following clauses, or change it to suit. Delete these two lines
-Files: debian/*
-Copyright: 2024 john <johnz@lunarg.com>
+License: Apache-2
+Comment: Add the corresponding license text here
+
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -32,12 +123,3 @@ License: GPL-2+
  .
  On Debian systems, the complete text of the GNU General
  Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
-
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.
-# Please avoid picking licenses with terms that are more restrictive than the
-# packaged work, as it may make Debian's contributions unacceptable upstream.
-#
-# If you need, there are some extra license texts available in two places:
-#   /usr/share/debhelper/dh_make/licenses/
-#   /usr/share/common-licenses/
