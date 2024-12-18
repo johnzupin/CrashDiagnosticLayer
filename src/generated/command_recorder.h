@@ -299,6 +299,39 @@ class CommandRecorder {
     CmdSetPrimitiveRestartEnableArgs* RecordCmdSetPrimitiveRestartEnable(VkCommandBuffer commandBuffer,
                                                                          VkBool32 primitiveRestartEnable);
 
+    CmdSetLineStippleArgs* RecordCmdSetLineStipple(VkCommandBuffer commandBuffer, uint32_t lineStippleFactor,
+                                                   uint16_t lineStipplePattern);
+
+    CmdBindIndexBuffer2Args* RecordCmdBindIndexBuffer2(VkCommandBuffer commandBuffer, VkBuffer buffer,
+                                                       VkDeviceSize offset, VkDeviceSize size, VkIndexType indexType);
+
+    CmdPushDescriptorSetArgs* RecordCmdPushDescriptorSet(VkCommandBuffer commandBuffer,
+                                                         VkPipelineBindPoint pipelineBindPoint, VkPipelineLayout layout,
+                                                         uint32_t set, uint32_t descriptorWriteCount,
+                                                         const VkWriteDescriptorSet* pDescriptorWrites);
+
+    CmdPushDescriptorSetWithTemplateArgs* RecordCmdPushDescriptorSetWithTemplate(
+        VkCommandBuffer commandBuffer, VkDescriptorUpdateTemplate descriptorUpdateTemplate, VkPipelineLayout layout,
+        uint32_t set, const void* pData);
+
+    CmdSetRenderingAttachmentLocationsArgs* RecordCmdSetRenderingAttachmentLocations(
+        VkCommandBuffer commandBuffer, const VkRenderingAttachmentLocationInfo* pLocationInfo);
+
+    CmdSetRenderingInputAttachmentIndicesArgs* RecordCmdSetRenderingInputAttachmentIndices(
+        VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo);
+
+    CmdBindDescriptorSets2Args* RecordCmdBindDescriptorSets2(VkCommandBuffer commandBuffer,
+                                                             const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo);
+
+    CmdPushConstants2Args* RecordCmdPushConstants2(VkCommandBuffer commandBuffer,
+                                                   const VkPushConstantsInfo* pPushConstantsInfo);
+
+    CmdPushDescriptorSet2Args* RecordCmdPushDescriptorSet2(VkCommandBuffer commandBuffer,
+                                                           const VkPushDescriptorSetInfo* pPushDescriptorSetInfo);
+
+    CmdPushDescriptorSetWithTemplate2Args* RecordCmdPushDescriptorSetWithTemplate2(
+        VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo);
+
     CmdBeginVideoCodingKHRArgs* RecordCmdBeginVideoCodingKHR(VkCommandBuffer commandBuffer,
                                                              const VkVideoBeginCodingInfoKHR* pBeginInfo);
 
@@ -359,10 +392,10 @@ class CommandRecorder {
         const VkFragmentShadingRateCombinerOpKHR combinerOps[2]);
 
     CmdSetRenderingAttachmentLocationsKHRArgs* RecordCmdSetRenderingAttachmentLocationsKHR(
-        VkCommandBuffer commandBuffer, const VkRenderingAttachmentLocationInfoKHR* pLocationInfo);
+        VkCommandBuffer commandBuffer, const VkRenderingAttachmentLocationInfo* pLocationInfo);
 
     CmdSetRenderingInputAttachmentIndicesKHRArgs* RecordCmdSetRenderingInputAttachmentIndicesKHR(
-        VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfoKHR* pInputAttachmentIndexInfo);
+        VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo);
 
     CmdEncodeVideoKHRArgs* RecordCmdEncodeVideoKHR(VkCommandBuffer commandBuffer,
                                                    const VkVideoEncodeInfoKHR* pEncodeInfo);
@@ -381,10 +414,6 @@ class CommandRecorder {
 
     CmdWriteTimestamp2KHRArgs* RecordCmdWriteTimestamp2KHR(VkCommandBuffer commandBuffer, VkPipelineStageFlags2 stage,
                                                            VkQueryPool queryPool, uint32_t query);
-
-    CmdWriteBufferMarker2AMDArgs* RecordCmdWriteBufferMarker2AMD(VkCommandBuffer commandBuffer,
-                                                                 VkPipelineStageFlags2 stage, VkBuffer dstBuffer,
-                                                                 VkDeviceSize dstOffset, uint32_t marker);
 
     CmdCopyBuffer2KHRArgs* RecordCmdCopyBuffer2KHR(VkCommandBuffer commandBuffer,
                                                    const VkCopyBufferInfo2* pCopyBufferInfo);
@@ -413,17 +442,16 @@ class CommandRecorder {
                                                          uint16_t lineStipplePattern);
 
     CmdBindDescriptorSets2KHRArgs* RecordCmdBindDescriptorSets2KHR(
-        VkCommandBuffer commandBuffer, const VkBindDescriptorSetsInfoKHR* pBindDescriptorSetsInfo);
+        VkCommandBuffer commandBuffer, const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo);
 
     CmdPushConstants2KHRArgs* RecordCmdPushConstants2KHR(VkCommandBuffer commandBuffer,
-                                                         const VkPushConstantsInfoKHR* pPushConstantsInfo);
+                                                         const VkPushConstantsInfo* pPushConstantsInfo);
 
-    CmdPushDescriptorSet2KHRArgs* RecordCmdPushDescriptorSet2KHR(
-        VkCommandBuffer commandBuffer, const VkPushDescriptorSetInfoKHR* pPushDescriptorSetInfo);
+    CmdPushDescriptorSet2KHRArgs* RecordCmdPushDescriptorSet2KHR(VkCommandBuffer commandBuffer,
+                                                                 const VkPushDescriptorSetInfo* pPushDescriptorSetInfo);
 
     CmdPushDescriptorSetWithTemplate2KHRArgs* RecordCmdPushDescriptorSetWithTemplate2KHR(
-        VkCommandBuffer commandBuffer,
-        const VkPushDescriptorSetWithTemplateInfoKHR* pPushDescriptorSetWithTemplateInfo);
+        VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo);
 
     CmdSetDescriptorBufferOffsets2EXTArgs* RecordCmdSetDescriptorBufferOffsets2EXT(
         VkCommandBuffer commandBuffer, const VkSetDescriptorBufferOffsetsInfoEXT* pSetDescriptorBufferOffsetsInfo);
@@ -513,22 +541,27 @@ class CommandRecorder {
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
     CmdInitializeGraphScratchMemoryAMDXArgs* RecordCmdInitializeGraphScratchMemoryAMDX(VkCommandBuffer commandBuffer,
-                                                                                       VkDeviceAddress scratch);
+                                                                                       VkPipeline executionGraph,
+                                                                                       VkDeviceAddress scratch,
+                                                                                       VkDeviceSize scratchSize);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
     CmdDispatchGraphAMDXArgs* RecordCmdDispatchGraphAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch,
+                                                         VkDeviceSize scratchSize,
                                                          const VkDispatchGraphCountInfoAMDX* pCountInfo);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
     CmdDispatchGraphIndirectAMDXArgs* RecordCmdDispatchGraphIndirectAMDX(
-        VkCommandBuffer commandBuffer, VkDeviceAddress scratch, const VkDispatchGraphCountInfoAMDX* pCountInfo);
+        VkCommandBuffer commandBuffer, VkDeviceAddress scratch, VkDeviceSize scratchSize,
+        const VkDispatchGraphCountInfoAMDX* pCountInfo);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
     CmdDispatchGraphIndirectCountAMDXArgs* RecordCmdDispatchGraphIndirectCountAMDX(VkCommandBuffer commandBuffer,
                                                                                    VkDeviceAddress scratch,
+                                                                                   VkDeviceSize scratchSize,
                                                                                    VkDeviceAddress countInfo);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
@@ -573,6 +606,10 @@ class CommandRecorder {
                                                                VkPipelineStageFlagBits pipelineStage,
                                                                VkBuffer dstBuffer, VkDeviceSize dstOffset,
                                                                uint32_t marker);
+
+    CmdWriteBufferMarker2AMDArgs* RecordCmdWriteBufferMarker2AMD(VkCommandBuffer commandBuffer,
+                                                                 VkPipelineStageFlags2 stage, VkBuffer dstBuffer,
+                                                                 VkDeviceSize dstOffset, uint32_t marker);
 
     CmdDrawMeshTasksNVArgs* RecordCmdDrawMeshTasksNV(VkCommandBuffer commandBuffer, uint32_t taskCount,
                                                      uint32_t firstTask);

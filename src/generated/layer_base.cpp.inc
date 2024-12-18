@@ -1521,6 +1521,145 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetPrimitiveRestartEnable(VkComman
     layer_data->interceptor->PostCmdSetPrimitiveRestartEnable(commandBuffer, primitiveRestartEnable);
 }
 
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetLineStipple(VkCommandBuffer commandBuffer, uint32_t lineStippleFactor,
+                                                             uint16_t lineStipplePattern) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdSetLineStipple(commandBuffer, lineStippleFactor, lineStipplePattern);
+
+    PFN_vkCmdSetLineStipple pfn = layer_data->dispatch_table.CmdSetLineStipple;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, lineStippleFactor, lineStipplePattern);
+    }
+
+    layer_data->interceptor->PostCmdSetLineStipple(commandBuffer, lineStippleFactor, lineStipplePattern);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdBindIndexBuffer2(VkCommandBuffer commandBuffer, VkBuffer buffer,
+                                                               VkDeviceSize offset, VkDeviceSize size,
+                                                               VkIndexType indexType) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdBindIndexBuffer2(commandBuffer, buffer, offset, size, indexType);
+
+    PFN_vkCmdBindIndexBuffer2 pfn = layer_data->dispatch_table.CmdBindIndexBuffer2;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, buffer, offset, size, indexType);
+    }
+
+    layer_data->interceptor->PostCmdBindIndexBuffer2(commandBuffer, buffer, offset, size, indexType);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushDescriptorSet(VkCommandBuffer commandBuffer,
+                                                                VkPipelineBindPoint pipelineBindPoint,
+                                                                VkPipelineLayout layout, uint32_t set,
+                                                                uint32_t descriptorWriteCount,
+                                                                const VkWriteDescriptorSet* pDescriptorWrites) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdPushDescriptorSet(commandBuffer, pipelineBindPoint, layout, set,
+                                                     descriptorWriteCount, pDescriptorWrites);
+
+    PFN_vkCmdPushDescriptorSet pfn = layer_data->dispatch_table.CmdPushDescriptorSet;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pipelineBindPoint, layout, set, descriptorWriteCount, pDescriptorWrites);
+    }
+
+    layer_data->interceptor->PostCmdPushDescriptorSet(commandBuffer, pipelineBindPoint, layout, set,
+                                                      descriptorWriteCount, pDescriptorWrites);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushDescriptorSetWithTemplate(
+    VkCommandBuffer commandBuffer, VkDescriptorUpdateTemplate descriptorUpdateTemplate, VkPipelineLayout layout,
+    uint32_t set, const void* pData) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdPushDescriptorSetWithTemplate(commandBuffer, descriptorUpdateTemplate, layout, set,
+                                                                 pData);
+
+    PFN_vkCmdPushDescriptorSetWithTemplate pfn = layer_data->dispatch_table.CmdPushDescriptorSetWithTemplate;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, descriptorUpdateTemplate, layout, set, pData);
+    }
+
+    layer_data->interceptor->PostCmdPushDescriptorSetWithTemplate(commandBuffer, descriptorUpdateTemplate, layout, set,
+                                                                  pData);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetRenderingAttachmentLocations(
+    VkCommandBuffer commandBuffer, const VkRenderingAttachmentLocationInfo* pLocationInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdSetRenderingAttachmentLocations(commandBuffer, pLocationInfo);
+
+    PFN_vkCmdSetRenderingAttachmentLocations pfn = layer_data->dispatch_table.CmdSetRenderingAttachmentLocations;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pLocationInfo);
+    }
+
+    layer_data->interceptor->PostCmdSetRenderingAttachmentLocations(commandBuffer, pLocationInfo);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetRenderingInputAttachmentIndices(
+    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdSetRenderingInputAttachmentIndices(commandBuffer, pInputAttachmentIndexInfo);
+
+    PFN_vkCmdSetRenderingInputAttachmentIndices pfn = layer_data->dispatch_table.CmdSetRenderingInputAttachmentIndices;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pInputAttachmentIndexInfo);
+    }
+
+    layer_data->interceptor->PostCmdSetRenderingInputAttachmentIndices(commandBuffer, pInputAttachmentIndexInfo);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdBindDescriptorSets2(
+    VkCommandBuffer commandBuffer, const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdBindDescriptorSets2(commandBuffer, pBindDescriptorSetsInfo);
+
+    PFN_vkCmdBindDescriptorSets2 pfn = layer_data->dispatch_table.CmdBindDescriptorSets2;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pBindDescriptorSetsInfo);
+    }
+
+    layer_data->interceptor->PostCmdBindDescriptorSets2(commandBuffer, pBindDescriptorSetsInfo);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushConstants2(VkCommandBuffer commandBuffer,
+                                                             const VkPushConstantsInfo* pPushConstantsInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdPushConstants2(commandBuffer, pPushConstantsInfo);
+
+    PFN_vkCmdPushConstants2 pfn = layer_data->dispatch_table.CmdPushConstants2;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pPushConstantsInfo);
+    }
+
+    layer_data->interceptor->PostCmdPushConstants2(commandBuffer, pPushConstantsInfo);
+}
+
+static VKAPI_ATTR void VKAPI_CALL
+InterceptCmdPushDescriptorSet2(VkCommandBuffer commandBuffer, const VkPushDescriptorSetInfo* pPushDescriptorSetInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdPushDescriptorSet2(commandBuffer, pPushDescriptorSetInfo);
+
+    PFN_vkCmdPushDescriptorSet2 pfn = layer_data->dispatch_table.CmdPushDescriptorSet2;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pPushDescriptorSetInfo);
+    }
+
+    layer_data->interceptor->PostCmdPushDescriptorSet2(commandBuffer, pPushDescriptorSetInfo);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushDescriptorSetWithTemplate2(
+    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdPushDescriptorSetWithTemplate2(commandBuffer, pPushDescriptorSetWithTemplateInfo);
+
+    PFN_vkCmdPushDescriptorSetWithTemplate2 pfn = layer_data->dispatch_table.CmdPushDescriptorSetWithTemplate2;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pPushDescriptorSetWithTemplateInfo);
+    }
+
+    layer_data->interceptor->PostCmdPushDescriptorSetWithTemplate2(commandBuffer, pPushDescriptorSetWithTemplateInfo);
+}
+
 static VKAPI_ATTR VkResult VKAPI_CALL InterceptAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain,
                                                                    uint64_t timeout, VkSemaphore semaphore,
                                                                    VkFence fence, uint32_t* pImageIndex) {
@@ -1833,7 +1972,7 @@ InterceptCmdSetFragmentShadingRateKHR(VkCommandBuffer commandBuffer, const VkExt
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetRenderingAttachmentLocationsKHR(
-    VkCommandBuffer commandBuffer, const VkRenderingAttachmentLocationInfoKHR* pLocationInfo) {
+    VkCommandBuffer commandBuffer, const VkRenderingAttachmentLocationInfo* pLocationInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
     layer_data->interceptor->PreCmdSetRenderingAttachmentLocationsKHR(commandBuffer, pLocationInfo);
 
@@ -1846,7 +1985,7 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetRenderingAttachmentLocationsKHR
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetRenderingInputAttachmentIndicesKHR(
-    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfoKHR* pInputAttachmentIndexInfo) {
+    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
     layer_data->interceptor->PreCmdSetRenderingInputAttachmentIndicesKHR(commandBuffer, pInputAttachmentIndexInfo);
 
@@ -1937,20 +2076,6 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdWriteTimestamp2KHR(VkCommandBuffer
     }
 
     layer_data->interceptor->PostCmdWriteTimestamp2KHR(commandBuffer, stage, queryPool, query);
-}
-
-static VKAPI_ATTR void VKAPI_CALL InterceptCmdWriteBufferMarker2AMD(VkCommandBuffer commandBuffer,
-                                                                    VkPipelineStageFlags2 stage, VkBuffer dstBuffer,
-                                                                    VkDeviceSize dstOffset, uint32_t marker) {
-    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
-    layer_data->interceptor->PreCmdWriteBufferMarker2AMD(commandBuffer, stage, dstBuffer, dstOffset, marker);
-
-    PFN_vkCmdWriteBufferMarker2AMD pfn = layer_data->dispatch_table.CmdWriteBufferMarker2AMD;
-    if (pfn != nullptr) {
-        pfn(commandBuffer, stage, dstBuffer, dstOffset, marker);
-    }
-
-    layer_data->interceptor->PostCmdWriteBufferMarker2AMD(commandBuffer, stage, dstBuffer, dstOffset, marker);
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdCopyBuffer2KHR(VkCommandBuffer commandBuffer,
@@ -2073,7 +2198,7 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetLineStippleKHR(VkCommandBuffer 
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdBindDescriptorSets2KHR(
-    VkCommandBuffer commandBuffer, const VkBindDescriptorSetsInfoKHR* pBindDescriptorSetsInfo) {
+    VkCommandBuffer commandBuffer, const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
     layer_data->interceptor->PreCmdBindDescriptorSets2KHR(commandBuffer, pBindDescriptorSetsInfo);
 
@@ -2086,7 +2211,7 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdBindDescriptorSets2KHR(
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushConstants2KHR(VkCommandBuffer commandBuffer,
-                                                                const VkPushConstantsInfoKHR* pPushConstantsInfo) {
+                                                                const VkPushConstantsInfo* pPushConstantsInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
     layer_data->interceptor->PreCmdPushConstants2KHR(commandBuffer, pPushConstantsInfo);
 
@@ -2099,7 +2224,7 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushConstants2KHR(VkCommandBuffer 
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushDescriptorSet2KHR(
-    VkCommandBuffer commandBuffer, const VkPushDescriptorSetInfoKHR* pPushDescriptorSetInfo) {
+    VkCommandBuffer commandBuffer, const VkPushDescriptorSetInfo* pPushDescriptorSetInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
     layer_data->interceptor->PreCmdPushDescriptorSet2KHR(commandBuffer, pPushDescriptorSetInfo);
 
@@ -2112,7 +2237,7 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushDescriptorSet2KHR(
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdPushDescriptorSetWithTemplate2KHR(
-    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfoKHR* pPushDescriptorSetWithTemplateInfo) {
+    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
     layer_data->interceptor->PreCmdPushDescriptorSetWithTemplate2KHR(commandBuffer, pPushDescriptorSetWithTemplateInfo);
 
@@ -2559,62 +2684,69 @@ static VKAPI_ATTR void VKAPI_CALL InterceptDestroyDebugUtilsMessengerEXT(VkInsta
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdInitializeGraphScratchMemoryAMDX(VkCommandBuffer commandBuffer,
-                                                                               VkDeviceAddress scratch) {
+                                                                               VkPipeline executionGraph,
+                                                                               VkDeviceAddress scratch,
+                                                                               VkDeviceSize scratchSize) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
-    layer_data->interceptor->PreCmdInitializeGraphScratchMemoryAMDX(commandBuffer, scratch);
+    layer_data->interceptor->PreCmdInitializeGraphScratchMemoryAMDX(commandBuffer, executionGraph, scratch,
+                                                                    scratchSize);
 
     PFN_vkCmdInitializeGraphScratchMemoryAMDX pfn = layer_data->dispatch_table.CmdInitializeGraphScratchMemoryAMDX;
     if (pfn != nullptr) {
-        pfn(commandBuffer, scratch);
+        pfn(commandBuffer, executionGraph, scratch, scratchSize);
     }
 
-    layer_data->interceptor->PostCmdInitializeGraphScratchMemoryAMDX(commandBuffer, scratch);
+    layer_data->interceptor->PostCmdInitializeGraphScratchMemoryAMDX(commandBuffer, executionGraph, scratch,
+                                                                     scratchSize);
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdDispatchGraphAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch,
+                                                                VkDeviceSize scratchSize,
                                                                 const VkDispatchGraphCountInfoAMDX* pCountInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
-    layer_data->interceptor->PreCmdDispatchGraphAMDX(commandBuffer, scratch, pCountInfo);
+    layer_data->interceptor->PreCmdDispatchGraphAMDX(commandBuffer, scratch, scratchSize, pCountInfo);
 
     PFN_vkCmdDispatchGraphAMDX pfn = layer_data->dispatch_table.CmdDispatchGraphAMDX;
     if (pfn != nullptr) {
-        pfn(commandBuffer, scratch, pCountInfo);
+        pfn(commandBuffer, scratch, scratchSize, pCountInfo);
     }
 
-    layer_data->interceptor->PostCmdDispatchGraphAMDX(commandBuffer, scratch, pCountInfo);
+    layer_data->interceptor->PostCmdDispatchGraphAMDX(commandBuffer, scratch, scratchSize, pCountInfo);
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
-static VKAPI_ATTR void VKAPI_CALL InterceptCmdDispatchGraphIndirectAMDX(
-    VkCommandBuffer commandBuffer, VkDeviceAddress scratch, const VkDispatchGraphCountInfoAMDX* pCountInfo) {
+static VKAPI_ATTR void VKAPI_CALL
+InterceptCmdDispatchGraphIndirectAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch, VkDeviceSize scratchSize,
+                                      const VkDispatchGraphCountInfoAMDX* pCountInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
-    layer_data->interceptor->PreCmdDispatchGraphIndirectAMDX(commandBuffer, scratch, pCountInfo);
+    layer_data->interceptor->PreCmdDispatchGraphIndirectAMDX(commandBuffer, scratch, scratchSize, pCountInfo);
 
     PFN_vkCmdDispatchGraphIndirectAMDX pfn = layer_data->dispatch_table.CmdDispatchGraphIndirectAMDX;
     if (pfn != nullptr) {
-        pfn(commandBuffer, scratch, pCountInfo);
+        pfn(commandBuffer, scratch, scratchSize, pCountInfo);
     }
 
-    layer_data->interceptor->PostCmdDispatchGraphIndirectAMDX(commandBuffer, scratch, pCountInfo);
+    layer_data->interceptor->PostCmdDispatchGraphIndirectAMDX(commandBuffer, scratch, scratchSize, pCountInfo);
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdDispatchGraphIndirectCountAMDX(VkCommandBuffer commandBuffer,
                                                                              VkDeviceAddress scratch,
+                                                                             VkDeviceSize scratchSize,
                                                                              VkDeviceAddress countInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
-    layer_data->interceptor->PreCmdDispatchGraphIndirectCountAMDX(commandBuffer, scratch, countInfo);
+    layer_data->interceptor->PreCmdDispatchGraphIndirectCountAMDX(commandBuffer, scratch, scratchSize, countInfo);
 
     PFN_vkCmdDispatchGraphIndirectCountAMDX pfn = layer_data->dispatch_table.CmdDispatchGraphIndirectCountAMDX;
     if (pfn != nullptr) {
-        pfn(commandBuffer, scratch, countInfo);
+        pfn(commandBuffer, scratch, scratchSize, countInfo);
     }
 
-    layer_data->interceptor->PostCmdDispatchGraphIndirectCountAMDX(commandBuffer, scratch, countInfo);
+    layer_data->interceptor->PostCmdDispatchGraphIndirectCountAMDX(commandBuffer, scratch, scratchSize, countInfo);
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
@@ -2767,6 +2899,20 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdWriteBufferMarkerAMD(VkCommandBuff
     }
 
     layer_data->interceptor->PostCmdWriteBufferMarkerAMD(commandBuffer, pipelineStage, dstBuffer, dstOffset, marker);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdWriteBufferMarker2AMD(VkCommandBuffer commandBuffer,
+                                                                    VkPipelineStageFlags2 stage, VkBuffer dstBuffer,
+                                                                    VkDeviceSize dstOffset, uint32_t marker) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdWriteBufferMarker2AMD(commandBuffer, stage, dstBuffer, dstOffset, marker);
+
+    PFN_vkCmdWriteBufferMarker2AMD pfn = layer_data->dispatch_table.CmdWriteBufferMarker2AMD;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, stage, dstBuffer, dstOffset, marker);
+    }
+
+    layer_data->interceptor->PostCmdWriteBufferMarker2AMD(commandBuffer, stage, dstBuffer, dstOffset, marker);
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdDrawMeshTasksNV(VkCommandBuffer commandBuffer, uint32_t taskCount,
@@ -4251,6 +4397,8 @@ const std::unordered_map<std::string, function_data>& GetNameToFuncPtrMap() {
     static const std::unordered_map<std::string, function_data> name_to_func_ptr_map = {
         {"vkCreateInstance", {kFuncTypeInst, (void*)InterceptCreateInstance}},
         {"vkDestroyInstance", {kFuncTypeInst, (void*)InterceptDestroyInstance}},
+        {"vkGetInstanceProcAddr", {kFuncTypeInst, (void*)InterceptGetInstanceProcAddr}},
+        {"vkGetDeviceProcAddr", {kFuncTypeDev, (void*)InterceptGetDeviceProcAddr}},
         {"vkCreateDevice", {kFuncTypePdev, (void*)InterceptCreateDevice}},
         {"vkDestroyDevice", {kFuncTypeDev, (void*)InterceptDestroyDevice}},
         {"vkEnumerateInstanceExtensionProperties",
@@ -4366,6 +4514,17 @@ const std::unordered_map<std::string, function_data>& GetNameToFuncPtrMap() {
         {"vkCmdSetRasterizerDiscardEnable", {kFuncTypeDev, (void*)InterceptCmdSetRasterizerDiscardEnable}},
         {"vkCmdSetDepthBiasEnable", {kFuncTypeDev, (void*)InterceptCmdSetDepthBiasEnable}},
         {"vkCmdSetPrimitiveRestartEnable", {kFuncTypeDev, (void*)InterceptCmdSetPrimitiveRestartEnable}},
+        {"vkCmdSetLineStipple", {kFuncTypeDev, (void*)InterceptCmdSetLineStipple}},
+        {"vkCmdBindIndexBuffer2", {kFuncTypeDev, (void*)InterceptCmdBindIndexBuffer2}},
+        {"vkCmdPushDescriptorSet", {kFuncTypeDev, (void*)InterceptCmdPushDescriptorSet}},
+        {"vkCmdPushDescriptorSetWithTemplate", {kFuncTypeDev, (void*)InterceptCmdPushDescriptorSetWithTemplate}},
+        {"vkCmdSetRenderingAttachmentLocations", {kFuncTypeDev, (void*)InterceptCmdSetRenderingAttachmentLocations}},
+        {"vkCmdSetRenderingInputAttachmentIndices",
+         {kFuncTypeDev, (void*)InterceptCmdSetRenderingInputAttachmentIndices}},
+        {"vkCmdBindDescriptorSets2", {kFuncTypeDev, (void*)InterceptCmdBindDescriptorSets2}},
+        {"vkCmdPushConstants2", {kFuncTypeDev, (void*)InterceptCmdPushConstants2}},
+        {"vkCmdPushDescriptorSet2", {kFuncTypeDev, (void*)InterceptCmdPushDescriptorSet2}},
+        {"vkCmdPushDescriptorSetWithTemplate2", {kFuncTypeDev, (void*)InterceptCmdPushDescriptorSetWithTemplate2}},
         {"vkAcquireNextImageKHR", {kFuncTypeDev, (void*)InterceptAcquireNextImageKHR}},
         {"vkQueuePresentKHR", {kFuncTypeDev, (void*)InterceptQueuePresentKHR}},
         {"vkCmdBeginVideoCodingKHR", {kFuncTypeDev, (void*)InterceptCmdBeginVideoCodingKHR}},
@@ -4398,7 +4557,6 @@ const std::unordered_map<std::string, function_data>& GetNameToFuncPtrMap() {
         {"vkCmdPipelineBarrier2KHR", {kFuncTypeDev, (void*)InterceptCmdPipelineBarrier2KHR}},
         {"vkCmdWriteTimestamp2KHR", {kFuncTypeDev, (void*)InterceptCmdWriteTimestamp2KHR}},
         {"vkQueueSubmit2KHR", {kFuncTypeDev, (void*)InterceptQueueSubmit2KHR}},
-        {"vkCmdWriteBufferMarker2AMD", {kFuncTypeDev, (void*)InterceptCmdWriteBufferMarker2AMD}},
         {"vkCmdCopyBuffer2KHR", {kFuncTypeDev, (void*)InterceptCmdCopyBuffer2KHR}},
         {"vkCmdCopyImage2KHR", {kFuncTypeDev, (void*)InterceptCmdCopyImage2KHR}},
         {"vkCmdCopyBufferToImage2KHR", {kFuncTypeDev, (void*)InterceptCmdCopyBufferToImage2KHR}},
@@ -4465,6 +4623,7 @@ const std::unordered_map<std::string, function_data>& GetNameToFuncPtrMap() {
         {"vkCmdWriteAccelerationStructuresPropertiesNV",
          {kFuncTypeDev, (void*)InterceptCmdWriteAccelerationStructuresPropertiesNV}},
         {"vkCmdWriteBufferMarkerAMD", {kFuncTypeDev, (void*)InterceptCmdWriteBufferMarkerAMD}},
+        {"vkCmdWriteBufferMarker2AMD", {kFuncTypeDev, (void*)InterceptCmdWriteBufferMarker2AMD}},
         {"vkCmdDrawMeshTasksNV", {kFuncTypeDev, (void*)InterceptCmdDrawMeshTasksNV}},
         {"vkCmdDrawMeshTasksIndirectNV", {kFuncTypeDev, (void*)InterceptCmdDrawMeshTasksIndirectNV}},
         {"vkCmdDrawMeshTasksIndirectCountNV", {kFuncTypeDev, (void*)InterceptCmdDrawMeshTasksIndirectCountNV}},

@@ -22,13 +22,6 @@
 #include <vulkan/utility/vk_struct_helper.hpp>
 #include <vulkan/utility/vk_safe_struct.hpp>
 
-#if defined(SYSTEM_TARGET_ANDROID) || defined(SYSTEM_TARGET_APPLE) || defined(SYSTEM_TARGET_LINUX) || \
-    defined(SYSTEM_TARGET_BSD)
-#include <sys/syscall.h>
-#include <unistd.h>
-#endif  // defined(SYSTEM_TARGET_ANDROID) || defined(SYSTEM_TARGET_APPLE) || defined(SYSTEM_TARGET_LINUX) ||
-        // defined(SYSTEM_TARGET_BSD)
-
 #include <atomic>
 #include <cassert>
 #include <chrono>
@@ -153,21 +146,14 @@ class Context : public Interceptor {
                          const VkDebugUtilsObjectNameInfoEXT& object);
 
     void DumpAllDevicesExecutionState(CrashSource crash_source);
-    void DumpDeviceExecutionState(Device& device);
-    void DumpDeviceExecutionState(Device& device, bool dump_prologue, CrashSource crash_source, YAML::Emitter& os);
+    void DumpDeviceExecutionState(Device& device, CrashSource crash_source = kDeviceLostError);
     void DumpDeviceExecutionState(Device& device, const std::string& error_report, bool dump_prologue,
                                   CrashSource crash_source, YAML::Emitter& os);
     void DumpDeviceExecutionStateValidationFailed(Device& device, YAML::Emitter& os);
 
     void DumpReportPrologue(YAML::Emitter& os);
 
-    void StopWatchdogTimer();
-
    private:
-    void StartWatchdogTimer();
-    void WatchdogTimer();
-    void UpdateWatchdog();
-
     void ValidateCommandBufferNotInUse(CommandBuffer* commandBuffer);
 
    public:
@@ -178,10 +164,6 @@ class Context : public Interceptor {
     const VkInstanceCreateInfo* GetModifiedInstanceCreateInfo(const VkInstanceCreateInfo* pCreateInfo) override;
     const VkDeviceCreateInfo* GetModifiedDeviceCreateInfo(VkPhysicalDevice physicalDevice,
                                                           const VkDeviceCreateInfo* pCreateInfo) override;
-
-    const DeviceExtensionsPresent& EnabledExtensions(VkPhysicalDevice physicalDevice) {
-        return extensions_of_interest_enabled_[physicalDevice];
-    }
 
 #include "cdl_commands.h.inc"
 
@@ -194,10 +176,6 @@ class Context : public Interceptor {
                               const VkAllocationCallbacks* pAllocator, VkDevice* pDevice, VkResult result) override;
 
     void PreDestroyDevice(VkDevice device, const VkAllocationCallbacks* pAllocator) override;
-
-    VkResult PostEnumerateDeviceExtensionProperties(VkPhysicalDevice physicalDevice, const char* pLayerName,
-                                                    uint32_t* pPropertyCount, VkExtensionProperties* pProperties,
-                                                    VkResult result) override;
 
     void PostGetDeviceQueue(VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue* pQueue) override;
 
@@ -348,9 +326,6 @@ class Context : public Interceptor {
 
     InstanceDispatchTable instance_dispatch_table_;
 
-    std::unordered_map<VkPhysicalDevice, DeviceExtensionsPresent> extensions_of_interest_present_;
-    std::unordered_map<VkPhysicalDevice, DeviceExtensionsPresent> extensions_of_interest_enabled_;
-
     mutable std::mutex device_create_infos_mutex_;
     std::unordered_map<const VkDeviceCreateInfo* /*modified_create_info*/, std::unique_ptr<DeviceCreateInfo>>
         device_create_infos_;
@@ -383,11 +358,6 @@ class Context : public Interceptor {
     std::filesystem::path base_output_path_;
     std::filesystem::path output_path_;
     int total_logs_ = 0;
-
-    // Watchdog
-    std::thread watchdog_thread_;
-    std::atomic<bool> watchdog_running_;
-    std::atomic<long long> last_submit_time_;
 };
 
 }  // namespace crash_diagnostic_layer

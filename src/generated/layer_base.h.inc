@@ -40,12 +40,6 @@ virtual VkResult PostCreateDevice(VkPhysicalDevice physicalDevice, const VkDevic
 
 virtual void PreDestroyDevice(VkDevice device, const VkAllocationCallbacks* pAllocator) {}
 
-virtual VkResult PostEnumerateDeviceExtensionProperties(VkPhysicalDevice physicalDevice, const char* pLayerName,
-                                                        uint32_t* pPropertyCount, VkExtensionProperties* pProperties,
-                                                        VkResult result) {
-    return result;
-}
-
 virtual void PostGetDeviceQueue(VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue* pQueue) {}
 
 virtual VkResult QueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo* pSubmits, VkFence fence) = 0;
@@ -676,6 +670,68 @@ virtual void PreCmdSetPrimitiveRestartEnable(VkCommandBuffer commandBuffer, VkBo
 
 virtual void PostCmdSetPrimitiveRestartEnable(VkCommandBuffer commandBuffer, VkBool32 primitiveRestartEnable) {}
 
+virtual void PreCmdSetLineStipple(VkCommandBuffer commandBuffer, uint32_t lineStippleFactor,
+                                  uint16_t lineStipplePattern) {}
+
+virtual void PostCmdSetLineStipple(VkCommandBuffer commandBuffer, uint32_t lineStippleFactor,
+                                   uint16_t lineStipplePattern) {}
+
+virtual void PreCmdBindIndexBuffer2(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize offset,
+                                    VkDeviceSize size, VkIndexType indexType) {}
+
+virtual void PostCmdBindIndexBuffer2(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize offset,
+                                     VkDeviceSize size, VkIndexType indexType) {}
+
+virtual void PreCmdPushDescriptorSet(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint,
+                                     VkPipelineLayout layout, uint32_t set, uint32_t descriptorWriteCount,
+                                     const VkWriteDescriptorSet* pDescriptorWrites) {}
+
+virtual void PostCmdPushDescriptorSet(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint,
+                                      VkPipelineLayout layout, uint32_t set, uint32_t descriptorWriteCount,
+                                      const VkWriteDescriptorSet* pDescriptorWrites) {}
+
+virtual void PreCmdPushDescriptorSetWithTemplate(VkCommandBuffer commandBuffer,
+                                                 VkDescriptorUpdateTemplate descriptorUpdateTemplate,
+                                                 VkPipelineLayout layout, uint32_t set, const void* pData) {}
+
+virtual void PostCmdPushDescriptorSetWithTemplate(VkCommandBuffer commandBuffer,
+                                                  VkDescriptorUpdateTemplate descriptorUpdateTemplate,
+                                                  VkPipelineLayout layout, uint32_t set, const void* pData) {}
+
+virtual void PreCmdSetRenderingAttachmentLocations(VkCommandBuffer commandBuffer,
+                                                   const VkRenderingAttachmentLocationInfo* pLocationInfo) {}
+
+virtual void PostCmdSetRenderingAttachmentLocations(VkCommandBuffer commandBuffer,
+                                                    const VkRenderingAttachmentLocationInfo* pLocationInfo) {}
+
+virtual void PreCmdSetRenderingInputAttachmentIndices(
+    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo) {}
+
+virtual void PostCmdSetRenderingInputAttachmentIndices(
+    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo) {}
+
+virtual void PreCmdBindDescriptorSets2(VkCommandBuffer commandBuffer,
+                                       const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo) {}
+
+virtual void PostCmdBindDescriptorSets2(VkCommandBuffer commandBuffer,
+                                        const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo) {}
+
+virtual void PreCmdPushConstants2(VkCommandBuffer commandBuffer, const VkPushConstantsInfo* pPushConstantsInfo) {}
+
+virtual void PostCmdPushConstants2(VkCommandBuffer commandBuffer, const VkPushConstantsInfo* pPushConstantsInfo) {}
+
+virtual void PreCmdPushDescriptorSet2(VkCommandBuffer commandBuffer,
+                                      const VkPushDescriptorSetInfo* pPushDescriptorSetInfo) {}
+
+virtual void PostCmdPushDescriptorSet2(VkCommandBuffer commandBuffer,
+                                       const VkPushDescriptorSetInfo* pPushDescriptorSetInfo) {}
+
+virtual void PreCmdPushDescriptorSetWithTemplate2(
+    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo) {}
+
+virtual void PostCmdPushDescriptorSetWithTemplate2(
+    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo) {}
+
 virtual VkResult PreAcquireNextImageKHR(VkDevice device, VkSwapchainKHR swapchain, uint64_t timeout,
                                         VkSemaphore semaphore, VkFence fence, uint32_t* pImageIndex) {
     return VK_SUCCESS;
@@ -809,16 +865,16 @@ virtual void PostCmdSetFragmentShadingRateKHR(VkCommandBuffer commandBuffer, con
                                               const VkFragmentShadingRateCombinerOpKHR combinerOps[2]) {}
 
 virtual void PreCmdSetRenderingAttachmentLocationsKHR(VkCommandBuffer commandBuffer,
-                                                      const VkRenderingAttachmentLocationInfoKHR* pLocationInfo) {}
+                                                      const VkRenderingAttachmentLocationInfo* pLocationInfo) {}
 
 virtual void PostCmdSetRenderingAttachmentLocationsKHR(VkCommandBuffer commandBuffer,
-                                                       const VkRenderingAttachmentLocationInfoKHR* pLocationInfo) {}
+                                                       const VkRenderingAttachmentLocationInfo* pLocationInfo) {}
 
 virtual void PreCmdSetRenderingInputAttachmentIndicesKHR(
-    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfoKHR* pInputAttachmentIndexInfo) {}
+    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo) {}
 
 virtual void PostCmdSetRenderingInputAttachmentIndicesKHR(
-    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfoKHR* pInputAttachmentIndexInfo) {}
+    VkCommandBuffer commandBuffer, const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo) {}
 
 virtual void PreCmdEncodeVideoKHR(VkCommandBuffer commandBuffer, const VkVideoEncodeInfoKHR* pEncodeInfo) {}
 
@@ -851,12 +907,6 @@ virtual void PostCmdWriteTimestamp2KHR(VkCommandBuffer commandBuffer, VkPipeline
                                        VkQueryPool queryPool, uint32_t query) {}
 
 virtual VkResult QueueSubmit2KHR(VkQueue queue, uint32_t submitCount, const VkSubmitInfo2* pSubmits, VkFence fence) = 0;
-
-virtual void PreCmdWriteBufferMarker2AMD(VkCommandBuffer commandBuffer, VkPipelineStageFlags2 stage, VkBuffer dstBuffer,
-                                         VkDeviceSize dstOffset, uint32_t marker) {}
-
-virtual void PostCmdWriteBufferMarker2AMD(VkCommandBuffer commandBuffer, VkPipelineStageFlags2 stage,
-                                          VkBuffer dstBuffer, VkDeviceSize dstOffset, uint32_t marker) {}
 
 virtual void PreCmdCopyBuffer2KHR(VkCommandBuffer commandBuffer, const VkCopyBufferInfo2* pCopyBufferInfo) {}
 
@@ -903,27 +953,26 @@ virtual void PostCmdSetLineStippleKHR(VkCommandBuffer commandBuffer, uint32_t li
                                       uint16_t lineStipplePattern) {}
 
 virtual void PreCmdBindDescriptorSets2KHR(VkCommandBuffer commandBuffer,
-                                          const VkBindDescriptorSetsInfoKHR* pBindDescriptorSetsInfo) {}
+                                          const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo) {}
 
 virtual void PostCmdBindDescriptorSets2KHR(VkCommandBuffer commandBuffer,
-                                           const VkBindDescriptorSetsInfoKHR* pBindDescriptorSetsInfo) {}
+                                           const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo) {}
 
-virtual void PreCmdPushConstants2KHR(VkCommandBuffer commandBuffer, const VkPushConstantsInfoKHR* pPushConstantsInfo) {}
+virtual void PreCmdPushConstants2KHR(VkCommandBuffer commandBuffer, const VkPushConstantsInfo* pPushConstantsInfo) {}
 
-virtual void PostCmdPushConstants2KHR(VkCommandBuffer commandBuffer, const VkPushConstantsInfoKHR* pPushConstantsInfo) {
-}
+virtual void PostCmdPushConstants2KHR(VkCommandBuffer commandBuffer, const VkPushConstantsInfo* pPushConstantsInfo) {}
 
 virtual void PreCmdPushDescriptorSet2KHR(VkCommandBuffer commandBuffer,
-                                         const VkPushDescriptorSetInfoKHR* pPushDescriptorSetInfo) {}
+                                         const VkPushDescriptorSetInfo* pPushDescriptorSetInfo) {}
 
 virtual void PostCmdPushDescriptorSet2KHR(VkCommandBuffer commandBuffer,
-                                          const VkPushDescriptorSetInfoKHR* pPushDescriptorSetInfo) {}
+                                          const VkPushDescriptorSetInfo* pPushDescriptorSetInfo) {}
 
 virtual void PreCmdPushDescriptorSetWithTemplate2KHR(
-    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfoKHR* pPushDescriptorSetWithTemplateInfo) {}
+    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo) {}
 
 virtual void PostCmdPushDescriptorSetWithTemplate2KHR(
-    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfoKHR* pPushDescriptorSetWithTemplateInfo) {}
+    VkCommandBuffer commandBuffer, const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo) {}
 
 virtual void PreCmdSetDescriptorBufferOffsets2EXT(
     VkCommandBuffer commandBuffer, const VkSetDescriptorBufferOffsetsInfoEXT* pSetDescriptorBufferOffsetsInfo) {}
@@ -1122,41 +1171,45 @@ virtual void PostDestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtils
                                                const VkAllocationCallbacks* pAllocator) {}
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
-virtual void PreCmdInitializeGraphScratchMemoryAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch) {}
+virtual void PreCmdInitializeGraphScratchMemoryAMDX(VkCommandBuffer commandBuffer, VkPipeline executionGraph,
+                                                    VkDeviceAddress scratch, VkDeviceSize scratchSize) {}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
-virtual void PostCmdInitializeGraphScratchMemoryAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch) {}
+virtual void PostCmdInitializeGraphScratchMemoryAMDX(VkCommandBuffer commandBuffer, VkPipeline executionGraph,
+                                                     VkDeviceAddress scratch, VkDeviceSize scratchSize) {}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
-virtual void PreCmdDispatchGraphAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch,
+virtual void PreCmdDispatchGraphAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch, VkDeviceSize scratchSize,
                                      const VkDispatchGraphCountInfoAMDX* pCountInfo) {}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
-virtual void PostCmdDispatchGraphAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch,
+virtual void PostCmdDispatchGraphAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch, VkDeviceSize scratchSize,
                                       const VkDispatchGraphCountInfoAMDX* pCountInfo) {}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 virtual void PreCmdDispatchGraphIndirectAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch,
-                                             const VkDispatchGraphCountInfoAMDX* pCountInfo) {}
+                                             VkDeviceSize scratchSize, const VkDispatchGraphCountInfoAMDX* pCountInfo) {
+}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 virtual void PostCmdDispatchGraphIndirectAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch,
+                                              VkDeviceSize scratchSize,
                                               const VkDispatchGraphCountInfoAMDX* pCountInfo) {}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 virtual void PreCmdDispatchGraphIndirectCountAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch,
-                                                  VkDeviceAddress countInfo) {}
+                                                  VkDeviceSize scratchSize, VkDeviceAddress countInfo) {}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 virtual void PostCmdDispatchGraphIndirectCountAMDX(VkCommandBuffer commandBuffer, VkDeviceAddress scratch,
-                                                   VkDeviceAddress countInfo) {}
+                                                   VkDeviceSize scratchSize, VkDeviceAddress countInfo) {}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
 virtual void PreCmdSetSampleLocationsEXT(VkCommandBuffer commandBuffer,
@@ -1240,6 +1293,12 @@ virtual void PreCmdWriteBufferMarkerAMD(VkCommandBuffer commandBuffer, VkPipelin
 
 virtual void PostCmdWriteBufferMarkerAMD(VkCommandBuffer commandBuffer, VkPipelineStageFlagBits pipelineStage,
                                          VkBuffer dstBuffer, VkDeviceSize dstOffset, uint32_t marker) {}
+
+virtual void PreCmdWriteBufferMarker2AMD(VkCommandBuffer commandBuffer, VkPipelineStageFlags2 stage, VkBuffer dstBuffer,
+                                         VkDeviceSize dstOffset, uint32_t marker) {}
+
+virtual void PostCmdWriteBufferMarker2AMD(VkCommandBuffer commandBuffer, VkPipelineStageFlags2 stage,
+                                          VkBuffer dstBuffer, VkDeviceSize dstOffset, uint32_t marker) {}
 
 virtual void PreCmdDrawMeshTasksNV(VkCommandBuffer commandBuffer, uint32_t taskCount, uint32_t firstTask) {}
 

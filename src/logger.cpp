@@ -19,10 +19,11 @@
 
 #include <cassert>
 #include <cstdarg>
+#include <iostream>
 
-#ifdef ANDROID
+#if defined(VK_USE_PLATFORM_ANDROID_KHR)
 #include <android/log.h>
-#endif  // ANDROID
+#endif
 
 #include <vulkan/utility/vk_struct_helper.hpp>
 
@@ -109,7 +110,7 @@ Logger::Logger(const Logger::Timepoint& start_time)
     : start_time_(start_time),
       default_cb_(vku::InitStruct<VkDebugUtilsMessengerCreateInfoEXT>(
           nullptr, 0, severity_mask_, VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT, DefaultLogCallback, this)),
-      log_file_(stderr) {}
+      log_stream_(&std::cerr) {}
 
 Logger::~Logger() { CloseLogFile(); }
 
@@ -117,14 +118,14 @@ void Logger::LogToStderr() {
     CloseLogFile();
 
     std::lock_guard<std::mutex> lock(file_access_mutex_);
-    log_file_ = stderr;
+    log_stream_ = &std::cerr;
 }
 
 void Logger::LogToStdout() {
     CloseLogFile();
 
     std::lock_guard<std::mutex> lock(file_access_mutex_);
-    log_file_ = stdout;
+    log_stream_ = &std::cout;
 }
 
 bool Logger::OpenLogFile(const std::filesystem::path& path) {
@@ -134,20 +135,20 @@ bool Logger::OpenLogFile(const std::filesystem::path& path) {
     if (path.has_parent_path()) {
         std::filesystem::create_directories(path.parent_path());
     }
-    log_file_ = fopen(path.string().c_str(), "at");
-    if (log_file_ == nullptr) {
-        perror(path.string().c_str());
+    log_file_.open(path, std::ios::ate);
+    if (!log_file_.is_open()) {
+        std::cerr << "Failed to open log file: " << path << std::endl;
         return false;
     }
+    log_file_ << std::unitbuf;
+    log_stream_ = &log_file_;
     return true;
 }
 
 void Logger::CloseLogFile() {
     std::lock_guard<std::mutex> lock(file_access_mutex_);
-    if (log_file_ != stdout && log_file_ != stderr && log_file_ != nullptr) {
-        fclose(log_file_);
-    }
-    log_file_ = nullptr;
+    log_file_.close();
+    log_stream_ = nullptr;
 }
 
 void Logger::UpdateSeverityMask() {
@@ -259,12 +260,11 @@ void Logger::Log(VkDebugUtilsMessageSeverityFlagBitsEXT severity, const std::str
     default_cb_.Log(severity, kMessageType, &cb_data);
 }
 
-#ifdef ANDROID
+#if defined(VK_USE_PLATFORM_ANDROID_KHR)
 VKAPI_ATTR VkBool32 VKAPI_CALL Logger::DefaultLogCallback(VkDebugUtilsMessageSeverityFlagBitsEXT severity,
                                                           VkDebugUtilsMessageTypeFlagsEXT types,
                                                           const VkDebugUtilsMessengerCallbackDataEXT* cb_data,
                                                           void* user_data) {
-    const Logger& logger = *reinterpret_cast<Logger*>(user_data);
     android_LogPriority prio = ANDROID_LOG_INFO;
     if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
         prio = ANDROID_LOG_ERROR;
@@ -298,11 +298,11 @@ VKAPI_ATTR VkBool32 VKAPI_CALL Logger::DefaultLogCallback(VkDebugUtilsMessageSev
     std::string timestamp = DurationToStr(elapsed);
 
     std::lock_guard<std::mutex> lock(logger.file_access_mutex_);
-    if (logger.log_file_) {
-        fprintf(logger.log_file_, "%s %s: %s\n", timestamp.c_str(), tag, cb_data->pMessage);
+    if (logger.log_stream_) {
+        *logger.log_stream_ << timestamp << " " << tag << ": " << cb_data->pMessage << std::endl;
     }
     return VK_FALSE;
 }
-#endif  // !ANDROID
+#endif
 
 }  // namespace crash_diagnostic_layer

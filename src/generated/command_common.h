@@ -120,6 +120,16 @@ struct Command {
         kCmdSetRasterizerDiscardEnable,
         kCmdSetDepthBiasEnable,
         kCmdSetPrimitiveRestartEnable,
+        kCmdSetLineStipple,
+        kCmdBindIndexBuffer2,
+        kCmdPushDescriptorSet,
+        kCmdPushDescriptorSetWithTemplate,
+        kCmdSetRenderingAttachmentLocations,
+        kCmdSetRenderingInputAttachmentIndices,
+        kCmdBindDescriptorSets2,
+        kCmdPushConstants2,
+        kCmdPushDescriptorSet2,
+        kCmdPushDescriptorSetWithTemplate2,
         kCmdBeginVideoCodingKHR,
         kCmdEndVideoCodingKHR,
         kCmdControlVideoCodingKHR,
@@ -144,7 +154,6 @@ struct Command {
         kCmdWaitEvents2KHR,
         kCmdPipelineBarrier2KHR,
         kCmdWriteTimestamp2KHR,
-        kCmdWriteBufferMarker2AMD,
         kCmdCopyBuffer2KHR,
         kCmdCopyImage2KHR,
         kCmdCopyBufferToImage2KHR,
@@ -202,6 +211,7 @@ struct Command {
         kCmdTraceRaysNV,
         kCmdWriteAccelerationStructuresPropertiesNV,
         kCmdWriteBufferMarkerAMD,
+        kCmdWriteBufferMarker2AMD,
         kCmdDrawMeshTasksNV,
         kCmdDrawMeshTasksIndirectNV,
         kCmdDrawMeshTasksIndirectCountNV,
@@ -879,6 +889,67 @@ struct CmdSetPrimitiveRestartEnableArgs {
     VkBool32 primitiveRestartEnable;
 };
 
+struct CmdSetLineStippleArgs {
+    VkCommandBuffer commandBuffer;
+    uint32_t lineStippleFactor;
+    uint16_t lineStipplePattern;
+};
+
+struct CmdBindIndexBuffer2Args {
+    VkCommandBuffer commandBuffer;
+    VkBuffer buffer;
+    VkDeviceSize offset;
+    VkDeviceSize size;
+    VkIndexType indexType;
+};
+
+struct CmdPushDescriptorSetArgs {
+    VkCommandBuffer commandBuffer;
+    VkPipelineBindPoint pipelineBindPoint;
+    VkPipelineLayout layout;
+    uint32_t set;
+    uint32_t descriptorWriteCount;
+    const VkWriteDescriptorSet* pDescriptorWrites;
+};
+
+struct CmdPushDescriptorSetWithTemplateArgs {
+    VkCommandBuffer commandBuffer;
+    VkDescriptorUpdateTemplate descriptorUpdateTemplate;
+    VkPipelineLayout layout;
+    uint32_t set;
+    const void* pData;
+};
+
+struct CmdSetRenderingAttachmentLocationsArgs {
+    VkCommandBuffer commandBuffer;
+    const VkRenderingAttachmentLocationInfo* pLocationInfo;
+};
+
+struct CmdSetRenderingInputAttachmentIndicesArgs {
+    VkCommandBuffer commandBuffer;
+    const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo;
+};
+
+struct CmdBindDescriptorSets2Args {
+    VkCommandBuffer commandBuffer;
+    const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo;
+};
+
+struct CmdPushConstants2Args {
+    VkCommandBuffer commandBuffer;
+    const VkPushConstantsInfo* pPushConstantsInfo;
+};
+
+struct CmdPushDescriptorSet2Args {
+    VkCommandBuffer commandBuffer;
+    const VkPushDescriptorSetInfo* pPushDescriptorSetInfo;
+};
+
+struct CmdPushDescriptorSetWithTemplate2Args {
+    VkCommandBuffer commandBuffer;
+    const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo;
+};
+
 struct CmdBeginVideoCodingKHRArgs {
     VkCommandBuffer commandBuffer;
     const VkVideoBeginCodingInfoKHR* pBeginInfo;
@@ -985,12 +1056,12 @@ struct CmdSetFragmentShadingRateKHRArgs {
 
 struct CmdSetRenderingAttachmentLocationsKHRArgs {
     VkCommandBuffer commandBuffer;
-    const VkRenderingAttachmentLocationInfoKHR* pLocationInfo;
+    const VkRenderingAttachmentLocationInfo* pLocationInfo;
 };
 
 struct CmdSetRenderingInputAttachmentIndicesKHRArgs {
     VkCommandBuffer commandBuffer;
-    const VkRenderingInputAttachmentIndexInfoKHR* pInputAttachmentIndexInfo;
+    const VkRenderingInputAttachmentIndexInfo* pInputAttachmentIndexInfo;
 };
 
 struct CmdEncodeVideoKHRArgs {
@@ -1027,14 +1098,6 @@ struct CmdWriteTimestamp2KHRArgs {
     VkPipelineStageFlags2 stage;
     VkQueryPool queryPool;
     uint32_t query;
-};
-
-struct CmdWriteBufferMarker2AMDArgs {
-    VkCommandBuffer commandBuffer;
-    VkPipelineStageFlags2 stage;
-    VkBuffer dstBuffer;
-    VkDeviceSize dstOffset;
-    uint32_t marker;
 };
 
 struct CmdCopyBuffer2KHRArgs {
@@ -1088,22 +1151,22 @@ struct CmdSetLineStippleKHRArgs {
 
 struct CmdBindDescriptorSets2KHRArgs {
     VkCommandBuffer commandBuffer;
-    const VkBindDescriptorSetsInfoKHR* pBindDescriptorSetsInfo;
+    const VkBindDescriptorSetsInfo* pBindDescriptorSetsInfo;
 };
 
 struct CmdPushConstants2KHRArgs {
     VkCommandBuffer commandBuffer;
-    const VkPushConstantsInfoKHR* pPushConstantsInfo;
+    const VkPushConstantsInfo* pPushConstantsInfo;
 };
 
 struct CmdPushDescriptorSet2KHRArgs {
     VkCommandBuffer commandBuffer;
-    const VkPushDescriptorSetInfoKHR* pPushDescriptorSetInfo;
+    const VkPushDescriptorSetInfo* pPushDescriptorSetInfo;
 };
 
 struct CmdPushDescriptorSetWithTemplate2KHRArgs {
     VkCommandBuffer commandBuffer;
-    const VkPushDescriptorSetWithTemplateInfoKHR* pPushDescriptorSetWithTemplateInfo;
+    const VkPushDescriptorSetWithTemplateInfo* pPushDescriptorSetWithTemplateInfo;
 };
 
 struct CmdSetDescriptorBufferOffsets2EXTArgs {
@@ -1255,7 +1318,9 @@ struct CmdInsertDebugUtilsLabelEXTArgs {
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 struct CmdInitializeGraphScratchMemoryAMDXArgs {
     VkCommandBuffer commandBuffer;
+    VkPipeline executionGraph;
     VkDeviceAddress scratch;
+    VkDeviceSize scratchSize;
 };
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
@@ -1263,6 +1328,7 @@ struct CmdInitializeGraphScratchMemoryAMDXArgs {
 struct CmdDispatchGraphAMDXArgs {
     VkCommandBuffer commandBuffer;
     VkDeviceAddress scratch;
+    VkDeviceSize scratchSize;
     const VkDispatchGraphCountInfoAMDX* pCountInfo;
 };
 #endif  // VK_ENABLE_BETA_EXTENSIONS
@@ -1271,6 +1337,7 @@ struct CmdDispatchGraphAMDXArgs {
 struct CmdDispatchGraphIndirectAMDXArgs {
     VkCommandBuffer commandBuffer;
     VkDeviceAddress scratch;
+    VkDeviceSize scratchSize;
     const VkDispatchGraphCountInfoAMDX* pCountInfo;
 };
 #endif  // VK_ENABLE_BETA_EXTENSIONS
@@ -1279,6 +1346,7 @@ struct CmdDispatchGraphIndirectAMDXArgs {
 struct CmdDispatchGraphIndirectCountAMDXArgs {
     VkCommandBuffer commandBuffer;
     VkDeviceAddress scratch;
+    VkDeviceSize scratchSize;
     VkDeviceAddress countInfo;
 };
 #endif  // VK_ENABLE_BETA_EXTENSIONS
@@ -1357,6 +1425,14 @@ struct CmdWriteAccelerationStructuresPropertiesNVArgs {
 struct CmdWriteBufferMarkerAMDArgs {
     VkCommandBuffer commandBuffer;
     VkPipelineStageFlagBits pipelineStage;
+    VkBuffer dstBuffer;
+    VkDeviceSize dstOffset;
+    uint32_t marker;
+};
+
+struct CmdWriteBufferMarker2AMDArgs {
+    VkCommandBuffer commandBuffer;
+    VkPipelineStageFlags2 stage;
     VkBuffer dstBuffer;
     VkDeviceSize dstOffset;
     uint32_t marker;
