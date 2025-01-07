@@ -1,3 +1,71 @@
+crashdiagnosticlayer (1.4.304.0~rc1-1lunarg22.04-1) jammy; urgency=medium
+
+  [ Jeremy Gebben ]
+  * build: Update Vulkan-Headers and VUL 1.3.297
+  * build: Update Vulkan-Headers and VUL to 1.3.298
+  * build: Update SPIRV dependencies
+  * tests: Ignore unknown entrypoints in the test icd
+
+  [ ziga-lunarg ]
+  * cdl: Fix dispatch for vkGetPhysicalDeviceFeatures2
+
+  [ Jeremy Gebben ]
+  * cdl: Add pipeline barriers after AMD marker writes
+
+  [ Spencer Fricke ]
+  * scripts: Better warning for getting reg.py
+
+  [ Jeremy Gebben ]
+  * build: Update Vulkan-Headers and VUL to 1.3.299
+  * build: Update SPIRV dependencies
+  * tests: Disable Sync.FenceWaitHang
+  * build: Update Vulkan-Headers and VUL to 1.3.300
+  * build: Update yaml-cpp to latest
+  * cdl: Fix Release-only warnings so that BUILD_WERROR works
+  * tests: Fix TSan errors in the test icd
+  * build: Add basic github workflows
+  * cdl: Test commit
+  * cdl: Revert Test commit
+  * cdl: Disable buffering when logging to a file
+  * build: Update Vulkan-Headers and VUL to 1.3.301
+  * build: Update SPIRV dependencies to latest
+  * scripts: Let generate_source.py be called with a single path
+  * build: Update Vulkan-Headers and VUL to 1.3.302
+
+  [ ziga-lunarg ]
+  * cdl: Fix return in DeviceEnumerateExtensionProperties
+
+  [ Jeremy Gebben ]
+  * json: Add layer documentation url
+  * build: Update Vulkan-Headers and VUL to 1.4.303
+  * cdl: Move watchdog functionality to Device level
+  * src: Fix up submit info pNexts
+  * tests: Add some positive semaphore tests
+  * build: Preliminary android support
+  * cdl: Fix tests on windows
+  * cdl: Fix device and instance creation for android loader
+  * cdl: Add GetProcAddr self lookup
+  * cdl: Clean up system specific code
+  * cdl: Re-disable symlinks on windows
+  * tests: Fix yaml parsing of matchingAddressRecords
+  * tests: Skip ray tracing tests when unsupported
+  * cdl: Fix warnings in command recorder
+  * build: Add android builds to github ci
+  * build: Update spirv dependencies for upcoming sdk
+
+  [ ziga-lunarg ]
+  * cdl: Fix loading instance functions
+
+  [ John Zupin ]
+  * packaging: debian: update copyright
+
+  [ Jeremy Gebben ]
+  * docs: Update README and json for Android support and BETA status
+  * tests: Change debug callbacks to use Vulkan-Hpp types
+  * build: Update Vulkan-Headers and VUL to 1.4.304
+
+ -- john <john@odin>  Mon, 06 Jan 2025 17:24:58 -0700
+
 crashdiagnosticlayer (1.3.296.0~rc1-1lunarg22.04-1) jammy; urgency=medium
 
   [ Jeremy Gebben ]
