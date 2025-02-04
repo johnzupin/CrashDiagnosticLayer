@@ -1,3 +1,11 @@
+crashdiagnosticlayer (1.4.304.1~rc1-1lunarg24.04-1) noble; urgency=medium
+
+  [ Jeremy Gebben ]
+  * layer_base: Remove TLS caching of device/instance handles
+  * cdl: Better handling for missing settings
+
+ -- john <john@odin>  Tue, 04 Feb 2025 15:09:38 -0700
+
 crashdiagnosticlayer (1.4.304.0~rc1-1lunarg24.04-1) noble; urgency=medium
 
   [ Jeremy Gebben ]
