@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -300,7 +300,10 @@ struct Command {
         kCmdOpticalFlowExecuteNV,
         kCmdBindShadersEXT,
         kCmdSetDepthClampRangeEXT,
+        kCmdConvertCooperativeVectorMatrixNV,
         kCmdSetAttachmentFeedbackLoopEnableEXT,
+        kCmdBuildClusterAccelerationStructureIndirectNV,
+        kCmdBuildPartitionedAccelerationStructuresNV,
         kCmdPreprocessGeneratedCommandsEXT,
         kCmdExecuteGeneratedCommandsEXT,
         kCmdBuildAccelerationStructuresKHR,
@@ -1963,9 +1966,25 @@ struct CmdSetDepthClampRangeEXTArgs {
     const VkDepthClampRangeEXT* pDepthClampRange;
 };
 
+struct CmdConvertCooperativeVectorMatrixNVArgs {
+    VkCommandBuffer commandBuffer;
+    uint32_t infoCount;
+    const VkConvertCooperativeVectorMatrixInfoNV* pInfos;
+};
+
 struct CmdSetAttachmentFeedbackLoopEnableEXTArgs {
     VkCommandBuffer commandBuffer;
     VkImageAspectFlags aspectMask;
+};
+
+struct CmdBuildClusterAccelerationStructureIndirectNVArgs {
+    VkCommandBuffer commandBuffer;
+    const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos;
+};
+
+struct CmdBuildPartitionedAccelerationStructuresNVArgs {
+    VkCommandBuffer commandBuffer;
+    const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo;
 };
 
 struct CmdPreprocessGeneratedCommandsEXTArgs {

@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -3282,6 +3282,7 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetDepthBias2EXT(VkCommandBuffer c
     layer_data->interceptor->PostCmdSetDepthBias2EXT(commandBuffer, pDepthBiasInfo);
 }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer,
                                                                  const VkCudaLaunchInfoNV* pLaunchInfo) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
@@ -3294,6 +3295,7 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdCudaLaunchKernelNV(VkCommandBuffer
 
     layer_data->interceptor->PostCmdCudaLaunchKernelNV(commandBuffer, pLaunchInfo);
 }
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdBindDescriptorBuffersEXT(
     VkCommandBuffer commandBuffer, uint32_t bufferCount, const VkDescriptorBufferBindingInfoEXT* pBindingInfos) {
@@ -4152,6 +4154,19 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetDepthClampRangeEXT(VkCommandBuf
     layer_data->interceptor->PostCmdSetDepthClampRangeEXT(commandBuffer, depthClampMode, pDepthClampRange);
 }
 
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdConvertCooperativeVectorMatrixNV(
+    VkCommandBuffer commandBuffer, uint32_t infoCount, const VkConvertCooperativeVectorMatrixInfoNV* pInfos) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdConvertCooperativeVectorMatrixNV(commandBuffer, infoCount, pInfos);
+
+    PFN_vkCmdConvertCooperativeVectorMatrixNV pfn = layer_data->dispatch_table.CmdConvertCooperativeVectorMatrixNV;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, infoCount, pInfos);
+    }
+
+    layer_data->interceptor->PostCmdConvertCooperativeVectorMatrixNV(commandBuffer, infoCount, pInfos);
+}
+
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer,
                                                                                  VkImageAspectFlags aspectMask) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
@@ -4163,6 +4178,34 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdSetAttachmentFeedbackLoopEnableEXT
     }
 
     layer_data->interceptor->PostCmdSetAttachmentFeedbackLoopEnableEXT(commandBuffer, aspectMask);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdBuildClusterAccelerationStructureIndirectNV(
+    VkCommandBuffer commandBuffer, const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdBuildClusterAccelerationStructureIndirectNV(commandBuffer, pCommandInfos);
+
+    PFN_vkCmdBuildClusterAccelerationStructureIndirectNV pfn =
+        layer_data->dispatch_table.CmdBuildClusterAccelerationStructureIndirectNV;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pCommandInfos);
+    }
+
+    layer_data->interceptor->PostCmdBuildClusterAccelerationStructureIndirectNV(commandBuffer, pCommandInfos);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdBuildPartitionedAccelerationStructuresNV(
+    VkCommandBuffer commandBuffer, const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdBuildPartitionedAccelerationStructuresNV(commandBuffer, pBuildInfo);
+
+    PFN_vkCmdBuildPartitionedAccelerationStructuresNV pfn =
+        layer_data->dispatch_table.CmdBuildPartitionedAccelerationStructuresNV;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pBuildInfo);
+    }
+
+    layer_data->interceptor->PostCmdBuildPartitionedAccelerationStructuresNV(commandBuffer, pBuildInfo);
 }
 
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdPreprocessGeneratedCommandsEXT(
@@ -4651,7 +4694,9 @@ const std::unordered_map<std::string, function_data>& GetNameToFuncPtrMap() {
         {"vkCmdExecuteGeneratedCommandsNV", {kFuncTypeDev, (void*)InterceptCmdExecuteGeneratedCommandsNV}},
         {"vkCmdBindPipelineShaderGroupNV", {kFuncTypeDev, (void*)InterceptCmdBindPipelineShaderGroupNV}},
         {"vkCmdSetDepthBias2EXT", {kFuncTypeDev, (void*)InterceptCmdSetDepthBias2EXT}},
+#ifdef VK_ENABLE_BETA_EXTENSIONS
         {"vkCmdCudaLaunchKernelNV", {kFuncTypeDev, (void*)InterceptCmdCudaLaunchKernelNV}},
+#endif  // VK_ENABLE_BETA_EXTENSIONS
         {"vkCmdBindDescriptorBuffersEXT", {kFuncTypeDev, (void*)InterceptCmdBindDescriptorBuffersEXT}},
         {"vkCmdSetDescriptorBufferOffsetsEXT", {kFuncTypeDev, (void*)InterceptCmdSetDescriptorBufferOffsetsEXT}},
         {"vkCmdBindDescriptorBufferEmbeddedSamplersEXT",
@@ -4718,8 +4763,13 @@ const std::unordered_map<std::string, function_data>& GetNameToFuncPtrMap() {
         {"vkCmdOpticalFlowExecuteNV", {kFuncTypeDev, (void*)InterceptCmdOpticalFlowExecuteNV}},
         {"vkCmdBindShadersEXT", {kFuncTypeDev, (void*)InterceptCmdBindShadersEXT}},
         {"vkCmdSetDepthClampRangeEXT", {kFuncTypeDev, (void*)InterceptCmdSetDepthClampRangeEXT}},
+        {"vkCmdConvertCooperativeVectorMatrixNV", {kFuncTypeDev, (void*)InterceptCmdConvertCooperativeVectorMatrixNV}},
         {"vkCmdSetAttachmentFeedbackLoopEnableEXT",
          {kFuncTypeDev, (void*)InterceptCmdSetAttachmentFeedbackLoopEnableEXT}},
+        {"vkCmdBuildClusterAccelerationStructureIndirectNV",
+         {kFuncTypeDev, (void*)InterceptCmdBuildClusterAccelerationStructureIndirectNV}},
+        {"vkCmdBuildPartitionedAccelerationStructuresNV",
+         {kFuncTypeDev, (void*)InterceptCmdBuildPartitionedAccelerationStructuresNV}},
         {"vkCmdPreprocessGeneratedCommandsEXT", {kFuncTypeDev, (void*)InterceptCmdPreprocessGeneratedCommandsEXT}},
         {"vkCmdExecuteGeneratedCommandsEXT", {kFuncTypeDev, (void*)InterceptCmdExecuteGeneratedCommandsEXT}},
         {"vkCmdBuildAccelerationStructuresKHR", {kFuncTypeDev, (void*)InterceptCmdBuildAccelerationStructuresKHR}},

@@ -1,6 +1,6 @@
 #!/usr/bin/python3 -i
 #
-# Copyright (c) 2024 The Khronos Group Inc.
+# Copyright (c) 2024-2025 Khronos Group Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 # limitations under the License.
 
 import os
-from generators.base_generator import BaseGenerator
+from base_generator import BaseGenerator
 from generators.generator_utils import PlatformGuardHelper
 
 class TestIcdGenerator(BaseGenerator):
@@ -150,7 +150,7 @@ class TestIcdGenerator(BaseGenerator):
 
             /***************************************************************************
             *
-            * Copyright (c) 2024 LunarG, Inc.
+            * Copyright (c) 2024-2025 LunarG, Inc.
             *
             * Licensed under the Apache License, Version 2.0 (the "License");
             * you may not use this file except in compliance with the License.

@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -566,7 +566,9 @@ class CommandTracker {
 
     void CmdSetDepthBias2EXT(VkCommandBuffer commandBuffer, const VkDepthBiasInfoEXT* pDepthBiasInfo);
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     void CmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo);
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
     void CmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
                                      const VkDescriptorBufferBindingInfoEXT* pBindingInfos);
@@ -728,7 +730,16 @@ class CommandTracker {
     void CmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer, VkDepthClampModeEXT depthClampMode,
                                   const VkDepthClampRangeEXT* pDepthClampRange);
 
+    void CmdConvertCooperativeVectorMatrixNV(VkCommandBuffer commandBuffer, uint32_t infoCount,
+                                             const VkConvertCooperativeVectorMatrixInfoNV* pInfos);
+
     void CmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer, VkImageAspectFlags aspectMask);
+
+    void CmdBuildClusterAccelerationStructureIndirectNV(
+        VkCommandBuffer commandBuffer, const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos);
+
+    void CmdBuildPartitionedAccelerationStructuresNV(VkCommandBuffer commandBuffer,
+                                                     const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo);
 
     void CmdPreprocessGeneratedCommandsEXT(VkCommandBuffer commandBuffer,
                                            const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo,

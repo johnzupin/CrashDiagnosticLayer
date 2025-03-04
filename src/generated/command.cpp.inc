@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1974,6 +1974,7 @@ void CommandBuffer::PostCmdSetDepthBias2EXT(VkCommandBuffer commandBuffer, const
     if (instrument_all_commands_) WriteCommandEndCheckpoint(tracker_.GetCommands().back().id);
 }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 void CommandBuffer::PreCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo) {
     tracker_.CmdCudaLaunchKernelNV(commandBuffer, pLaunchInfo);
     if (instrument_all_commands_) WriteCommandBeginCheckpoint(tracker_.GetCommands().back().id);
@@ -1981,6 +1982,7 @@ void CommandBuffer::PreCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, cons
 void CommandBuffer::PostCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo) {
     if (instrument_all_commands_) WriteCommandEndCheckpoint(tracker_.GetCommands().back().id);
 }
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
 void CommandBuffer::PreCmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
                                                    const VkDescriptorBufferBindingInfoEXT* pBindingInfos) {
@@ -2594,6 +2596,16 @@ void CommandBuffer::PostCmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer, 
     if (instrument_all_commands_) WriteCommandEndCheckpoint(tracker_.GetCommands().back().id);
 }
 
+void CommandBuffer::PreCmdConvertCooperativeVectorMatrixNV(VkCommandBuffer commandBuffer, uint32_t infoCount,
+                                                           const VkConvertCooperativeVectorMatrixInfoNV* pInfos) {
+    tracker_.CmdConvertCooperativeVectorMatrixNV(commandBuffer, infoCount, pInfos);
+    if (instrument_all_commands_) WriteCommandBeginCheckpoint(tracker_.GetCommands().back().id);
+}
+void CommandBuffer::PostCmdConvertCooperativeVectorMatrixNV(VkCommandBuffer commandBuffer, uint32_t infoCount,
+                                                            const VkConvertCooperativeVectorMatrixInfoNV* pInfos) {
+    if (instrument_all_commands_) WriteCommandEndCheckpoint(tracker_.GetCommands().back().id);
+}
+
 void CommandBuffer::PreCmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer,
                                                              VkImageAspectFlags aspectMask) {
     tracker_.CmdSetAttachmentFeedbackLoopEnableEXT(commandBuffer, aspectMask);
@@ -2601,6 +2613,26 @@ void CommandBuffer::PreCmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer com
 }
 void CommandBuffer::PostCmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer,
                                                               VkImageAspectFlags aspectMask) {
+    if (instrument_all_commands_) WriteCommandEndCheckpoint(tracker_.GetCommands().back().id);
+}
+
+void CommandBuffer::PreCmdBuildClusterAccelerationStructureIndirectNV(
+    VkCommandBuffer commandBuffer, const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos) {
+    tracker_.CmdBuildClusterAccelerationStructureIndirectNV(commandBuffer, pCommandInfos);
+    if (instrument_all_commands_) WriteCommandBeginCheckpoint(tracker_.GetCommands().back().id);
+}
+void CommandBuffer::PostCmdBuildClusterAccelerationStructureIndirectNV(
+    VkCommandBuffer commandBuffer, const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos) {
+    if (instrument_all_commands_) WriteCommandEndCheckpoint(tracker_.GetCommands().back().id);
+}
+
+void CommandBuffer::PreCmdBuildPartitionedAccelerationStructuresNV(
+    VkCommandBuffer commandBuffer, const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo) {
+    tracker_.CmdBuildPartitionedAccelerationStructuresNV(commandBuffer, pBuildInfo);
+    if (instrument_all_commands_) WriteCommandBeginCheckpoint(tracker_.GetCommands().back().id);
+}
+void CommandBuffer::PostCmdBuildPartitionedAccelerationStructuresNV(
+    VkCommandBuffer commandBuffer, const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo) {
     if (instrument_all_commands_) WriteCommandEndCheckpoint(tracker_.GetCommands().back().id);
 }
 

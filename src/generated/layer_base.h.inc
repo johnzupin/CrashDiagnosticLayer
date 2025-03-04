@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1454,9 +1454,13 @@ virtual void PreCmdSetDepthBias2EXT(VkCommandBuffer commandBuffer, const VkDepth
 
 virtual void PostCmdSetDepthBias2EXT(VkCommandBuffer commandBuffer, const VkDepthBiasInfoEXT* pDepthBiasInfo) {}
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 virtual void PreCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo) {}
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 virtual void PostCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo) {}
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
 virtual void PreCmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
                                             const VkDescriptorBufferBindingInfoEXT* pBindingInfos) {}
@@ -1802,9 +1806,27 @@ virtual void PreCmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer, VkDepthC
 virtual void PostCmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer, VkDepthClampModeEXT depthClampMode,
                                           const VkDepthClampRangeEXT* pDepthClampRange) {}
 
+virtual void PreCmdConvertCooperativeVectorMatrixNV(VkCommandBuffer commandBuffer, uint32_t infoCount,
+                                                    const VkConvertCooperativeVectorMatrixInfoNV* pInfos) {}
+
+virtual void PostCmdConvertCooperativeVectorMatrixNV(VkCommandBuffer commandBuffer, uint32_t infoCount,
+                                                     const VkConvertCooperativeVectorMatrixInfoNV* pInfos) {}
+
 virtual void PreCmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer, VkImageAspectFlags aspectMask) {}
 
 virtual void PostCmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer, VkImageAspectFlags aspectMask) {}
+
+virtual void PreCmdBuildClusterAccelerationStructureIndirectNV(
+    VkCommandBuffer commandBuffer, const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos) {}
+
+virtual void PostCmdBuildClusterAccelerationStructureIndirectNV(
+    VkCommandBuffer commandBuffer, const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos) {}
+
+virtual void PreCmdBuildPartitionedAccelerationStructuresNV(
+    VkCommandBuffer commandBuffer, const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo) {}
+
+virtual void PostCmdBuildPartitionedAccelerationStructuresNV(
+    VkCommandBuffer commandBuffer, const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo) {}
 
 virtual void PreCmdPreprocessGeneratedCommandsEXT(VkCommandBuffer commandBuffer,
                                                   const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo,
