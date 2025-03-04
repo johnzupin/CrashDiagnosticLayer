@@ -1,3 +1,19 @@
+crashdiagnosticlayer (1.4.309.0~rc1-1lunarg22.04-1) jammy; urgency=medium
+
+  [ Jeremy Gebben ]
+  * layer_base: Remove TLS caching of device/instance handles
+  * build: Update Vulkan-Headers and VUL to 1.4.305
+  * cdl: Better handling for missing settings
+  * build: Update Vulkan-Headers and VUL to 1.4.306
+  * build: Update Vulkan-Headers and VUL to 1.4.307
+  * build: Update cmake to 3.22.1
+  * build: Update shader dependencies to latest
+  * build: Update Vulkan-Headers and VUL to 1.4.309
+  * scripts: Uses generator code from Vulkan-Headers
+  * build: Update glslang
+
+ -- john <john@odin>  Tue, 04 Mar 2025 11:21:41 -0700
+
 crashdiagnosticlayer (1.4.304.1~rc1-1lunarg22.04-1) jammy; urgency=medium
 
   [ Jeremy Gebben ]
