@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -551,8 +551,14 @@ const char *Command::GetCommandName(const Command &cmd) {
             return "vkCmdBindShadersEXT";
         case Command::Type::kCmdSetDepthClampRangeEXT:
             return "vkCmdSetDepthClampRangeEXT";
+        case Command::Type::kCmdConvertCooperativeVectorMatrixNV:
+            return "vkCmdConvertCooperativeVectorMatrixNV";
         case Command::Type::kCmdSetAttachmentFeedbackLoopEnableEXT:
             return "vkCmdSetAttachmentFeedbackLoopEnableEXT";
+        case Command::Type::kCmdBuildClusterAccelerationStructureIndirectNV:
+            return "vkCmdBuildClusterAccelerationStructureIndirectNV";
+        case Command::Type::kCmdBuildPartitionedAccelerationStructuresNV:
+            return "vkCmdBuildPartitionedAccelerationStructuresNV";
         case Command::Type::kCmdPreprocessGeneratedCommandsEXT:
             return "vkCmdPreprocessGeneratedCommandsEXT";
         case Command::Type::kCmdExecuteGeneratedCommandsEXT:

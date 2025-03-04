@@ -1,6 +1,6 @@
 #!/usr/bin/python3 -i
 #
-# Copyright (c) 2023-2024 LunarG, Inc.
+# Copyright (c) 2023-2025 LunarG, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from generators.base_generator import BaseGenerator
+from base_generator import BaseGenerator
 from enum import IntEnum
 
 # class syntax
@@ -95,7 +95,7 @@ class CdlBaseOutputGenerator(BaseGenerator):
 /***************************************************************************
 *
 * Copyright (C) 2021 Google Inc.
-* Copyright (c) 2023-2024 LunarG, Inc.
+* Copyright (c) 2023-2025 LunarG, Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.

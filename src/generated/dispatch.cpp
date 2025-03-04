@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -272,6 +272,8 @@ void InitInstanceDispatchTable(VkInstance instance, PFN_vkGetInstanceProcAddr pa
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
     dt->GetPhysicalDeviceOpticalFlowImageFormatsNV =
         (PFN_vkGetPhysicalDeviceOpticalFlowImageFormatsNV)pa(instance, "vkGetPhysicalDeviceOpticalFlowImageFormatsNV");
+    dt->GetPhysicalDeviceCooperativeVectorPropertiesNV = (PFN_vkGetPhysicalDeviceCooperativeVectorPropertiesNV)pa(
+        instance, "vkGetPhysicalDeviceCooperativeVectorPropertiesNV");
     dt->GetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV =
         (PFN_vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV)pa(
             instance, "vkGetPhysicalDeviceCooperativeMatrixFlexibleDimensionsPropertiesNV");
@@ -880,7 +882,9 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
     dt->CreateCudaFunctionNV = (PFN_vkCreateCudaFunctionNV)pa(device, "vkCreateCudaFunctionNV");
     dt->DestroyCudaModuleNV = (PFN_vkDestroyCudaModuleNV)pa(device, "vkDestroyCudaModuleNV");
     dt->DestroyCudaFunctionNV = (PFN_vkDestroyCudaFunctionNV)pa(device, "vkDestroyCudaFunctionNV");
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     dt->CmdCudaLaunchKernelNV = (PFN_vkCmdCudaLaunchKernelNV)pa(device, "vkCmdCudaLaunchKernelNV");
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 #ifdef VK_USE_PLATFORM_METAL_EXT
     dt->ExportMetalObjectsEXT = (PFN_vkExportMetalObjectsEXT)pa(device, "vkExportMetalObjectsEXT");
 #endif  // VK_USE_PLATFORM_METAL_EXT
@@ -1061,6 +1065,10 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
         (PFN_vkGetFramebufferTilePropertiesQCOM)pa(device, "vkGetFramebufferTilePropertiesQCOM");
     dt->GetDynamicRenderingTilePropertiesQCOM =
         (PFN_vkGetDynamicRenderingTilePropertiesQCOM)pa(device, "vkGetDynamicRenderingTilePropertiesQCOM");
+    dt->ConvertCooperativeVectorMatrixNV =
+        (PFN_vkConvertCooperativeVectorMatrixNV)pa(device, "vkConvertCooperativeVectorMatrixNV");
+    dt->CmdConvertCooperativeVectorMatrixNV =
+        (PFN_vkCmdConvertCooperativeVectorMatrixNV)pa(device, "vkCmdConvertCooperativeVectorMatrixNV");
     dt->SetLatencySleepModeNV = (PFN_vkSetLatencySleepModeNV)pa(device, "vkSetLatencySleepModeNV");
     dt->LatencySleepNV = (PFN_vkLatencySleepNV)pa(device, "vkLatencySleepNV");
     dt->SetLatencyMarkerNV = (PFN_vkSetLatencyMarkerNV)pa(device, "vkSetLatencyMarkerNV");
@@ -1071,6 +1079,14 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
 #ifdef VK_USE_PLATFORM_SCREEN_QNX
     dt->GetScreenBufferPropertiesQNX = (PFN_vkGetScreenBufferPropertiesQNX)pa(device, "vkGetScreenBufferPropertiesQNX");
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
+    dt->GetClusterAccelerationStructureBuildSizesNV =
+        (PFN_vkGetClusterAccelerationStructureBuildSizesNV)pa(device, "vkGetClusterAccelerationStructureBuildSizesNV");
+    dt->CmdBuildClusterAccelerationStructureIndirectNV = (PFN_vkCmdBuildClusterAccelerationStructureIndirectNV)pa(
+        device, "vkCmdBuildClusterAccelerationStructureIndirectNV");
+    dt->GetPartitionedAccelerationStructuresBuildSizesNV = (PFN_vkGetPartitionedAccelerationStructuresBuildSizesNV)pa(
+        device, "vkGetPartitionedAccelerationStructuresBuildSizesNV");
+    dt->CmdBuildPartitionedAccelerationStructuresNV =
+        (PFN_vkCmdBuildPartitionedAccelerationStructuresNV)pa(device, "vkCmdBuildPartitionedAccelerationStructuresNV");
     dt->GetGeneratedCommandsMemoryRequirementsEXT =
         (PFN_vkGetGeneratedCommandsMemoryRequirementsEXT)pa(device, "vkGetGeneratedCommandsMemoryRequirementsEXT");
     dt->CmdPreprocessGeneratedCommandsEXT =
@@ -1089,6 +1105,13 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
         (PFN_vkUpdateIndirectExecutionSetPipelineEXT)pa(device, "vkUpdateIndirectExecutionSetPipelineEXT");
     dt->UpdateIndirectExecutionSetShaderEXT =
         (PFN_vkUpdateIndirectExecutionSetShaderEXT)pa(device, "vkUpdateIndirectExecutionSetShaderEXT");
+#ifdef VK_USE_PLATFORM_METAL_EXT
+    dt->GetMemoryMetalHandleEXT = (PFN_vkGetMemoryMetalHandleEXT)pa(device, "vkGetMemoryMetalHandleEXT");
+#endif  // VK_USE_PLATFORM_METAL_EXT
+#ifdef VK_USE_PLATFORM_METAL_EXT
+    dt->GetMemoryMetalHandlePropertiesEXT =
+        (PFN_vkGetMemoryMetalHandlePropertiesEXT)pa(device, "vkGetMemoryMetalHandlePropertiesEXT");
+#endif  // VK_USE_PLATFORM_METAL_EXT
     dt->CreateAccelerationStructureKHR =
         (PFN_vkCreateAccelerationStructureKHR)pa(device, "vkCreateAccelerationStructureKHR");
     dt->DestroyAccelerationStructureKHR =

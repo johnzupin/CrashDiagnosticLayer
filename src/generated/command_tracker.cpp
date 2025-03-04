@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2024,6 +2024,7 @@ void CommandTracker::CmdSetDepthBias2EXT(VkCommandBuffer commandBuffer, const Vk
     commands_.push_back(cmd);
 }
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 void CommandTracker::CmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo) {
     Command cmd{};
     cmd.type = Command::Type::kCmdCudaLaunchKernelNV;
@@ -2032,6 +2033,7 @@ void CommandTracker::CmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const 
     cmd.parameters = recorder_.RecordCmdCudaLaunchKernelNV(commandBuffer, pLaunchInfo);
     commands_.push_back(cmd);
 }
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
 void CommandTracker::CmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
                                                  const VkDescriptorBufferBindingInfoEXT* pBindingInfos) {
@@ -2655,6 +2657,16 @@ void CommandTracker::CmdSetDepthClampRangeEXT(VkCommandBuffer commandBuffer, VkD
     commands_.push_back(cmd);
 }
 
+void CommandTracker::CmdConvertCooperativeVectorMatrixNV(VkCommandBuffer commandBuffer, uint32_t infoCount,
+                                                         const VkConvertCooperativeVectorMatrixInfoNV* pInfos) {
+    Command cmd{};
+    cmd.type = Command::Type::kCmdConvertCooperativeVectorMatrixNV;
+    cmd.id = static_cast<uint32_t>(commands_.size()) + 1;
+    cmd.labels = labels_;
+    cmd.parameters = recorder_.RecordCmdConvertCooperativeVectorMatrixNV(commandBuffer, infoCount, pInfos);
+    commands_.push_back(cmd);
+}
+
 void CommandTracker::CmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer commandBuffer,
                                                            VkImageAspectFlags aspectMask) {
     Command cmd{};
@@ -2662,6 +2674,26 @@ void CommandTracker::CmdSetAttachmentFeedbackLoopEnableEXT(VkCommandBuffer comma
     cmd.id = static_cast<uint32_t>(commands_.size()) + 1;
     cmd.labels = labels_;
     cmd.parameters = recorder_.RecordCmdSetAttachmentFeedbackLoopEnableEXT(commandBuffer, aspectMask);
+    commands_.push_back(cmd);
+}
+
+void CommandTracker::CmdBuildClusterAccelerationStructureIndirectNV(
+    VkCommandBuffer commandBuffer, const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos) {
+    Command cmd{};
+    cmd.type = Command::Type::kCmdBuildClusterAccelerationStructureIndirectNV;
+    cmd.id = static_cast<uint32_t>(commands_.size()) + 1;
+    cmd.labels = labels_;
+    cmd.parameters = recorder_.RecordCmdBuildClusterAccelerationStructureIndirectNV(commandBuffer, pCommandInfos);
+    commands_.push_back(cmd);
+}
+
+void CommandTracker::CmdBuildPartitionedAccelerationStructuresNV(
+    VkCommandBuffer commandBuffer, const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo) {
+    Command cmd{};
+    cmd.type = Command::Type::kCmdBuildPartitionedAccelerationStructuresNV;
+    cmd.id = static_cast<uint32_t>(commands_.size()) + 1;
+    cmd.labels = labels_;
+    cmd.parameters = recorder_.RecordCmdBuildPartitionedAccelerationStructuresNV(commandBuffer, pBuildInfo);
     commands_.push_back(cmd);
 }
 

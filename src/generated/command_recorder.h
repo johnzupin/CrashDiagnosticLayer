@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2021 Google Inc.
- * Copyright (c) 2023-2024 LunarG, Inc.
+ * Copyright (c) 2023-2025 LunarG, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -701,8 +701,10 @@ class CommandRecorder {
     CmdSetDepthBias2EXTArgs* RecordCmdSetDepthBias2EXT(VkCommandBuffer commandBuffer,
                                                        const VkDepthBiasInfoEXT* pDepthBiasInfo);
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     CmdCudaLaunchKernelNVArgs* RecordCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer,
                                                            const VkCudaLaunchInfoNV* pLaunchInfo);
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
     CmdBindDescriptorBuffersEXTArgs* RecordCmdBindDescriptorBuffersEXT(
         VkCommandBuffer commandBuffer, uint32_t bufferCount, const VkDescriptorBufferBindingInfoEXT* pBindingInfos);
@@ -904,8 +906,17 @@ class CommandRecorder {
                                                                  VkDepthClampModeEXT depthClampMode,
                                                                  const VkDepthClampRangeEXT* pDepthClampRange);
 
+    CmdConvertCooperativeVectorMatrixNVArgs* RecordCmdConvertCooperativeVectorMatrixNV(
+        VkCommandBuffer commandBuffer, uint32_t infoCount, const VkConvertCooperativeVectorMatrixInfoNV* pInfos);
+
     CmdSetAttachmentFeedbackLoopEnableEXTArgs* RecordCmdSetAttachmentFeedbackLoopEnableEXT(
         VkCommandBuffer commandBuffer, VkImageAspectFlags aspectMask);
+
+    CmdBuildClusterAccelerationStructureIndirectNVArgs* RecordCmdBuildClusterAccelerationStructureIndirectNV(
+        VkCommandBuffer commandBuffer, const VkClusterAccelerationStructureCommandsInfoNV* pCommandInfos);
+
+    CmdBuildPartitionedAccelerationStructuresNVArgs* RecordCmdBuildPartitionedAccelerationStructuresNV(
+        VkCommandBuffer commandBuffer, const VkBuildPartitionedAccelerationStructureInfoNV* pBuildInfo);
 
     CmdPreprocessGeneratedCommandsEXTArgs* RecordCmdPreprocessGeneratedCommandsEXT(
         VkCommandBuffer commandBuffer, const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo,
