@@ -570,6 +570,12 @@ class CommandTracker {
     void CmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
+    void CmdDispatchTileQCOM(VkCommandBuffer commandBuffer);
+
+    void CmdBeginPerTileExecutionQCOM(VkCommandBuffer commandBuffer, const VkPerTileBeginInfoQCOM* pPerTileBeginInfo);
+
+    void CmdEndPerTileExecutionQCOM(VkCommandBuffer commandBuffer, const VkPerTileEndInfoQCOM* pPerTileEndInfo);
+
     void CmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
                                      const VkDescriptorBufferBindingInfoEXT* pBindingInfos);
 
@@ -747,6 +753,8 @@ class CommandTracker {
 
     void CmdExecuteGeneratedCommandsEXT(VkCommandBuffer commandBuffer, VkBool32 isPreprocessed,
                                         const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo);
+
+    void CmdEndRendering2EXT(VkCommandBuffer commandBuffer, const VkRenderingEndInfoEXT* pRenderingEndInfo);
 
     void CmdBuildAccelerationStructuresKHR(VkCommandBuffer commandBuffer, uint32_t infoCount,
                                            const VkAccelerationStructureBuildGeometryInfoKHR* pInfos,

@@ -238,7 +238,12 @@ struct Command {
         kCmdExecuteGeneratedCommandsNV,
         kCmdBindPipelineShaderGroupNV,
         kCmdSetDepthBias2EXT,
+#ifdef VK_ENABLE_BETA_EXTENSIONS
         kCmdCudaLaunchKernelNV,
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+        kCmdDispatchTileQCOM,
+        kCmdBeginPerTileExecutionQCOM,
+        kCmdEndPerTileExecutionQCOM,
         kCmdBindDescriptorBuffersEXT,
         kCmdSetDescriptorBufferOffsetsEXT,
         kCmdBindDescriptorBufferEmbeddedSamplersEXT,
@@ -306,6 +311,7 @@ struct Command {
         kCmdBuildPartitionedAccelerationStructuresNV,
         kCmdPreprocessGeneratedCommandsEXT,
         kCmdExecuteGeneratedCommandsEXT,
+        kCmdEndRendering2EXT,
         kCmdBuildAccelerationStructuresKHR,
         kCmdBuildAccelerationStructuresIndirectKHR,
         kCmdCopyAccelerationStructureKHR,
@@ -1599,9 +1605,25 @@ struct CmdSetDepthBias2EXTArgs {
     const VkDepthBiasInfoEXT* pDepthBiasInfo;
 };
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 struct CmdCudaLaunchKernelNVArgs {
     VkCommandBuffer commandBuffer;
     const VkCudaLaunchInfoNV* pLaunchInfo;
+};
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+
+struct CmdDispatchTileQCOMArgs {
+    VkCommandBuffer commandBuffer;
+};
+
+struct CmdBeginPerTileExecutionQCOMArgs {
+    VkCommandBuffer commandBuffer;
+    const VkPerTileBeginInfoQCOM* pPerTileBeginInfo;
+};
+
+struct CmdEndPerTileExecutionQCOMArgs {
+    VkCommandBuffer commandBuffer;
+    const VkPerTileEndInfoQCOM* pPerTileEndInfo;
 };
 
 struct CmdBindDescriptorBuffersEXTArgs {
@@ -1997,6 +2019,11 @@ struct CmdExecuteGeneratedCommandsEXTArgs {
     VkCommandBuffer commandBuffer;
     VkBool32 isPreprocessed;
     const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo;
+};
+
+struct CmdEndRendering2EXTArgs {
+    VkCommandBuffer commandBuffer;
+    const VkRenderingEndInfoEXT* pRenderingEndInfo;
 };
 
 struct CmdBuildAccelerationStructuresKHRArgs {

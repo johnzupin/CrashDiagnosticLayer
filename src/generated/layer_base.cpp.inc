@@ -3297,6 +3297,44 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdCudaLaunchKernelNV(VkCommandBuffer
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdDispatchTileQCOM(VkCommandBuffer commandBuffer) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdDispatchTileQCOM(commandBuffer);
+
+    PFN_vkCmdDispatchTileQCOM pfn = layer_data->dispatch_table.CmdDispatchTileQCOM;
+    if (pfn != nullptr) {
+        pfn(commandBuffer);
+    }
+
+    layer_data->interceptor->PostCmdDispatchTileQCOM(commandBuffer);
+}
+
+static VKAPI_ATTR void VKAPI_CALL
+InterceptCmdBeginPerTileExecutionQCOM(VkCommandBuffer commandBuffer, const VkPerTileBeginInfoQCOM* pPerTileBeginInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdBeginPerTileExecutionQCOM(commandBuffer, pPerTileBeginInfo);
+
+    PFN_vkCmdBeginPerTileExecutionQCOM pfn = layer_data->dispatch_table.CmdBeginPerTileExecutionQCOM;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pPerTileBeginInfo);
+    }
+
+    layer_data->interceptor->PostCmdBeginPerTileExecutionQCOM(commandBuffer, pPerTileBeginInfo);
+}
+
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdEndPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                                                      const VkPerTileEndInfoQCOM* pPerTileEndInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdEndPerTileExecutionQCOM(commandBuffer, pPerTileEndInfo);
+
+    PFN_vkCmdEndPerTileExecutionQCOM pfn = layer_data->dispatch_table.CmdEndPerTileExecutionQCOM;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pPerTileEndInfo);
+    }
+
+    layer_data->interceptor->PostCmdEndPerTileExecutionQCOM(commandBuffer, pPerTileEndInfo);
+}
+
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdBindDescriptorBuffersEXT(
     VkCommandBuffer commandBuffer, uint32_t bufferCount, const VkDescriptorBufferBindingInfoEXT* pBindingInfos) {
     auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
@@ -4237,6 +4275,19 @@ static VKAPI_ATTR void VKAPI_CALL InterceptCmdExecuteGeneratedCommandsEXT(
     layer_data->interceptor->PostCmdExecuteGeneratedCommandsEXT(commandBuffer, isPreprocessed, pGeneratedCommandsInfo);
 }
 
+static VKAPI_ATTR void VKAPI_CALL InterceptCmdEndRendering2EXT(VkCommandBuffer commandBuffer,
+                                                               const VkRenderingEndInfoEXT* pRenderingEndInfo) {
+    auto layer_data = GetDeviceLayerData(DataKey(commandBuffer));
+    layer_data->interceptor->PreCmdEndRendering2EXT(commandBuffer, pRenderingEndInfo);
+
+    PFN_vkCmdEndRendering2EXT pfn = layer_data->dispatch_table.CmdEndRendering2EXT;
+    if (pfn != nullptr) {
+        pfn(commandBuffer, pRenderingEndInfo);
+    }
+
+    layer_data->interceptor->PostCmdEndRendering2EXT(commandBuffer, pRenderingEndInfo);
+}
+
 static VKAPI_ATTR void VKAPI_CALL InterceptCmdBuildAccelerationStructuresKHR(
     VkCommandBuffer commandBuffer, uint32_t infoCount, const VkAccelerationStructureBuildGeometryInfoKHR* pInfos,
     const VkAccelerationStructureBuildRangeInfoKHR* const* ppBuildRangeInfos) {
@@ -4697,6 +4748,9 @@ const std::unordered_map<std::string, function_data>& GetNameToFuncPtrMap() {
 #ifdef VK_ENABLE_BETA_EXTENSIONS
         {"vkCmdCudaLaunchKernelNV", {kFuncTypeDev, (void*)InterceptCmdCudaLaunchKernelNV}},
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+        {"vkCmdDispatchTileQCOM", {kFuncTypeDev, (void*)InterceptCmdDispatchTileQCOM}},
+        {"vkCmdBeginPerTileExecutionQCOM", {kFuncTypeDev, (void*)InterceptCmdBeginPerTileExecutionQCOM}},
+        {"vkCmdEndPerTileExecutionQCOM", {kFuncTypeDev, (void*)InterceptCmdEndPerTileExecutionQCOM}},
         {"vkCmdBindDescriptorBuffersEXT", {kFuncTypeDev, (void*)InterceptCmdBindDescriptorBuffersEXT}},
         {"vkCmdSetDescriptorBufferOffsetsEXT", {kFuncTypeDev, (void*)InterceptCmdSetDescriptorBufferOffsetsEXT}},
         {"vkCmdBindDescriptorBufferEmbeddedSamplersEXT",
@@ -4772,6 +4826,7 @@ const std::unordered_map<std::string, function_data>& GetNameToFuncPtrMap() {
          {kFuncTypeDev, (void*)InterceptCmdBuildPartitionedAccelerationStructuresNV}},
         {"vkCmdPreprocessGeneratedCommandsEXT", {kFuncTypeDev, (void*)InterceptCmdPreprocessGeneratedCommandsEXT}},
         {"vkCmdExecuteGeneratedCommandsEXT", {kFuncTypeDev, (void*)InterceptCmdExecuteGeneratedCommandsEXT}},
+        {"vkCmdEndRendering2EXT", {kFuncTypeDev, (void*)InterceptCmdEndRendering2EXT}},
         {"vkCmdBuildAccelerationStructuresKHR", {kFuncTypeDev, (void*)InterceptCmdBuildAccelerationStructuresKHR}},
         {"vkCmdBuildAccelerationStructuresIndirectKHR",
          {kFuncTypeDev, (void*)InterceptCmdBuildAccelerationStructuresIndirectKHR}},

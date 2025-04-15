@@ -951,6 +951,18 @@ void PreCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchI
 void PostCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo) override;
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
+void PreCmdDispatchTileQCOM(VkCommandBuffer commandBuffer) override;
+void PostCmdDispatchTileQCOM(VkCommandBuffer commandBuffer) override;
+
+void PreCmdBeginPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                     const VkPerTileBeginInfoQCOM* pPerTileBeginInfo) override;
+void PostCmdBeginPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                      const VkPerTileBeginInfoQCOM* pPerTileBeginInfo) override;
+
+void PreCmdEndPerTileExecutionQCOM(VkCommandBuffer commandBuffer, const VkPerTileEndInfoQCOM* pPerTileEndInfo) override;
+void PostCmdEndPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                    const VkPerTileEndInfoQCOM* pPerTileEndInfo) override;
+
 void PreCmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
                                     const VkDescriptorBufferBindingInfoEXT* pBindingInfos) override;
 void PostCmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
@@ -1252,6 +1264,9 @@ void PreCmdExecuteGeneratedCommandsEXT(VkCommandBuffer commandBuffer, VkBool32 i
                                        const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo) override;
 void PostCmdExecuteGeneratedCommandsEXT(VkCommandBuffer commandBuffer, VkBool32 isPreprocessed,
                                         const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo) override;
+
+void PreCmdEndRendering2EXT(VkCommandBuffer commandBuffer, const VkRenderingEndInfoEXT* pRenderingEndInfo) override;
+void PostCmdEndRendering2EXT(VkCommandBuffer commandBuffer, const VkRenderingEndInfoEXT* pRenderingEndInfo) override;
 
 void PreCmdBuildAccelerationStructuresKHR(
     VkCommandBuffer commandBuffer, uint32_t infoCount, const VkAccelerationStructureBuildGeometryInfoKHR* pInfos,

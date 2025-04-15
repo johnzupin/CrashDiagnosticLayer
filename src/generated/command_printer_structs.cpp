@@ -13716,6 +13716,29 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkDisplayPlaneCapabilities2KH
     return os;
 }
 
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceShaderBfloat16FeaturesKHR &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::Key << "shaderBFloat16Type";
+    // shaderBFloat16Type -> Field -> VkBool32
+    os << YAML::Value << t.shaderBFloat16Type;
+    os << YAML::Key << "shaderBFloat16DotProduct";
+    // shaderBFloat16DotProduct -> Field -> VkBool32
+    os << YAML::Value << t.shaderBFloat16DotProduct;
+    os << YAML::Key << "shaderBFloat16CooperativeMatrix";
+    // shaderBFloat16CooperativeMatrix -> Field -> VkBool32
+    os << YAML::Value << t.shaderBFloat16CooperativeMatrix;
+    os << YAML::EndMap;
+    return os;
+}
+
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDevicePortabilitySubsetFeaturesKHR &t) {
     os << YAML::BeginMap;
@@ -22762,6 +22785,150 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceCudaKernelLau
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceTileShadingFeaturesQCOM &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::Key << "tileShading";
+    // tileShading -> Field -> VkBool32
+    os << YAML::Value << t.tileShading;
+    os << YAML::Key << "tileShadingFragmentStage";
+    // tileShadingFragmentStage -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingFragmentStage;
+    os << YAML::Key << "tileShadingColorAttachments";
+    // tileShadingColorAttachments -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingColorAttachments;
+    os << YAML::Key << "tileShadingDepthAttachments";
+    // tileShadingDepthAttachments -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingDepthAttachments;
+    os << YAML::Key << "tileShadingStencilAttachments";
+    // tileShadingStencilAttachments -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingStencilAttachments;
+    os << YAML::Key << "tileShadingInputAttachments";
+    // tileShadingInputAttachments -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingInputAttachments;
+    os << YAML::Key << "tileShadingSampledAttachments";
+    // tileShadingSampledAttachments -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingSampledAttachments;
+    os << YAML::Key << "tileShadingPerTileDraw";
+    // tileShadingPerTileDraw -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingPerTileDraw;
+    os << YAML::Key << "tileShadingPerTileDispatch";
+    // tileShadingPerTileDispatch -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingPerTileDispatch;
+    os << YAML::Key << "tileShadingDispatchTile";
+    // tileShadingDispatchTile -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingDispatchTile;
+    os << YAML::Key << "tileShadingApron";
+    // tileShadingApron -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingApron;
+    os << YAML::Key << "tileShadingAnisotropicApron";
+    // tileShadingAnisotropicApron -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingAnisotropicApron;
+    os << YAML::Key << "tileShadingAtomicOps";
+    // tileShadingAtomicOps -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingAtomicOps;
+    os << YAML::Key << "tileShadingImageProcessing";
+    // tileShadingImageProcessing -> Field -> VkBool32
+    os << YAML::Value << t.tileShadingImageProcessing;
+    os << YAML::EndMap;
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceTileShadingPropertiesQCOM &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::Key << "maxApronSize";
+    // maxApronSize -> Field -> uint32_t
+    os << YAML::Value << t.maxApronSize;
+    os << YAML::Key << "preferNonCoherent";
+    // preferNonCoherent -> Field -> VkBool32
+    os << YAML::Value << t.preferNonCoherent;
+    os << YAML::Key << "tileGranularity";
+    // tileGranularity -> Field -> VkExtent2D
+    os << YAML::Value << t.tileGranularity;
+    os << YAML::Key << "maxTileShadingRate";
+    // maxTileShadingRate -> Field -> VkExtent2D
+    os << YAML::Value << t.maxTileShadingRate;
+    os << YAML::EndMap;
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderPassTileShadingCreateInfoQCOM &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::Key << "flags";
+    // flags -> Field -> VkTileShadingRenderPassFlagsQCOM
+    os << YAML::Value << t.flags;
+    os << YAML::Key << "tileApronSize";
+    // tileApronSize -> Field -> VkExtent2D
+    os << YAML::Value << t.tileApronSize;
+    os << YAML::EndMap;
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPerTileBeginInfoQCOM &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::EndMap;
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPerTileEndInfoQCOM &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::EndMap;
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkDispatchTileInfoQCOM &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::EndMap;
+    return os;
+}
+
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkQueryLowLatencySupportNV &t) {
     os << YAML::BeginMap;
     os << YAML::Key << "sType";
@@ -26436,7 +26603,7 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderPassStripeSubmitInfoA
     return os;
 }
 
-YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensityMapOffsetFeaturesQCOM &t) {
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensityMapOffsetFeaturesEXT &t) {
     os << YAML::BeginMap;
     os << YAML::Key << "sType";
     // sType -> Field -> VkStructureType
@@ -26453,7 +26620,7 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensi
     return os;
 }
 
-YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensityMapOffsetPropertiesQCOM &t) {
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensityMapOffsetPropertiesEXT &t) {
     os << YAML::BeginMap;
     os << YAML::Key << "sType";
     // sType -> Field -> VkStructureType
@@ -26470,7 +26637,7 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensi
     return os;
 }
 
-YAML::Emitter &operator<<(YAML::Emitter &os, const VkSubpassFragmentDensityMapOffsetEndInfoQCOM &t) {
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderPassFragmentDensityMapOffsetEndInfoEXT &t) {
     os << YAML::BeginMap;
     os << YAML::Key << "sType";
     // sType -> Field -> VkStructureType
@@ -29064,6 +29231,77 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceRawAccessChai
     return os;
 }
 
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkExternalComputeQueueDeviceCreateInfoNV &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::Key << "reservedExternalQueues";
+    // reservedExternalQueues -> Field -> uint32_t
+    os << YAML::Value << t.reservedExternalQueues;
+    os << YAML::EndMap;
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkExternalComputeQueueCreateInfoNV &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::Key << "preferredQueue";
+    // preferredQueue -> Field -> VkQueue
+    os << YAML::Value << t.preferredQueue;
+    os << YAML::EndMap;
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkExternalComputeQueueDataParamsNV &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::Key << "deviceIndex";
+    // deviceIndex -> Field -> uint32_t
+    os << YAML::Value << t.deviceIndex;
+    os << YAML::EndMap;
+    return os;
+}
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceExternalComputeQueuePropertiesNV &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::Key << "externalDataSize";
+    // externalDataSize -> Field -> uint32_t
+    os << YAML::Value << t.externalDataSize;
+    os << YAML::Key << "maxExternalQueues";
+    // maxExternalQueues -> Field -> uint32_t
+    os << YAML::Value << t.maxExternalQueues;
+    os << YAML::EndMap;
+    return os;
+}
+
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceCommandBufferInheritanceFeaturesNV &t) {
     os << YAML::BeginMap;
     os << YAML::Key << "sType";
@@ -30799,6 +31037,20 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDevicePresentMeteri
     return os;
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderingEndInfoEXT &t) {
+    os << YAML::BeginMap;
+    os << YAML::Key << "sType";
+    // sType -> Field -> VkStructureType
+    os << YAML::Value << t.sType;
+    os << YAML::Key << "pNext";
+    // pNext -> Field -> ConstNextPtr(void)
+    os << YAML::Value << YAML::BeginSeq;
+    PrintNextPtr(os, t.pNext);
+    os << YAML::EndSeq;
+    os << YAML::EndMap;
+    return os;
+}
 
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkAccelerationStructureBuildRangeInfoKHR &t) {
     os << YAML::BeginMap;
@@ -32869,6 +33121,9 @@ YAML::Emitter &PrintVkStruct(YAML::Emitter &os, const VkStruct *pStruct) {
         case VK_STRUCTURE_TYPE_DISPLAY_PLANE_CAPABILITIES_2_KHR:
             os << *reinterpret_cast<const VkDisplayPlaneCapabilities2KHR *>(pStruct);
             break;
+        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_BFLOAT16_FEATURES_KHR:
+            os << *reinterpret_cast<const VkPhysicalDeviceShaderBfloat16FeaturesKHR *>(pStruct);
+            break;
 #ifdef VK_ENABLE_BETA_EXTENSIONS
         case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_FEATURES_KHR:
             os << *reinterpret_cast<const VkPhysicalDevicePortabilitySubsetFeaturesKHR *>(pStruct);
@@ -33893,6 +34148,24 @@ YAML::Emitter &PrintVkStruct(YAML::Emitter &os, const VkStruct *pStruct) {
             os << *reinterpret_cast<const VkPhysicalDeviceCudaKernelLaunchPropertiesNV *>(pStruct);
             break;
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TILE_SHADING_FEATURES_QCOM:
+            os << *reinterpret_cast<const VkPhysicalDeviceTileShadingFeaturesQCOM *>(pStruct);
+            break;
+        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TILE_SHADING_PROPERTIES_QCOM:
+            os << *reinterpret_cast<const VkPhysicalDeviceTileShadingPropertiesQCOM *>(pStruct);
+            break;
+        case VK_STRUCTURE_TYPE_RENDER_PASS_TILE_SHADING_CREATE_INFO_QCOM:
+            os << *reinterpret_cast<const VkRenderPassTileShadingCreateInfoQCOM *>(pStruct);
+            break;
+        case VK_STRUCTURE_TYPE_PER_TILE_BEGIN_INFO_QCOM:
+            os << *reinterpret_cast<const VkPerTileBeginInfoQCOM *>(pStruct);
+            break;
+        case VK_STRUCTURE_TYPE_PER_TILE_END_INFO_QCOM:
+            os << *reinterpret_cast<const VkPerTileEndInfoQCOM *>(pStruct);
+            break;
+        case VK_STRUCTURE_TYPE_DISPATCH_TILE_INFO_QCOM:
+            os << *reinterpret_cast<const VkDispatchTileInfoQCOM *>(pStruct);
+            break;
         case VK_STRUCTURE_TYPE_QUERY_LOW_LATENCY_SUPPORT_NV:
             os << *reinterpret_cast<const VkQueryLowLatencySupportNV *>(pStruct);
             break;
@@ -34368,14 +34641,14 @@ YAML::Emitter &PrintVkStruct(YAML::Emitter &os, const VkStruct *pStruct) {
         case VK_STRUCTURE_TYPE_RENDER_PASS_STRIPE_SUBMIT_INFO_ARM:
             os << *reinterpret_cast<const VkRenderPassStripeSubmitInfoARM *>(pStruct);
             break;
-        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_OFFSET_FEATURES_QCOM:
-            os << *reinterpret_cast<const VkPhysicalDeviceFragmentDensityMapOffsetFeaturesQCOM *>(pStruct);
+        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_OFFSET_FEATURES_EXT:
+            os << *reinterpret_cast<const VkPhysicalDeviceFragmentDensityMapOffsetFeaturesEXT *>(pStruct);
             break;
-        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_OFFSET_PROPERTIES_QCOM:
-            os << *reinterpret_cast<const VkPhysicalDeviceFragmentDensityMapOffsetPropertiesQCOM *>(pStruct);
+        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_OFFSET_PROPERTIES_EXT:
+            os << *reinterpret_cast<const VkPhysicalDeviceFragmentDensityMapOffsetPropertiesEXT *>(pStruct);
             break;
-        case VK_STRUCTURE_TYPE_SUBPASS_FRAGMENT_DENSITY_MAP_OFFSET_END_INFO_QCOM:
-            os << *reinterpret_cast<const VkSubpassFragmentDensityMapOffsetEndInfoQCOM *>(pStruct);
+        case VK_STRUCTURE_TYPE_RENDER_PASS_FRAGMENT_DENSITY_MAP_OFFSET_END_INFO_EXT:
+            os << *reinterpret_cast<const VkRenderPassFragmentDensityMapOffsetEndInfoEXT *>(pStruct);
             break;
         case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COPY_MEMORY_INDIRECT_FEATURES_NV:
             os << *reinterpret_cast<const VkPhysicalDeviceCopyMemoryIndirectFeaturesNV *>(pStruct);
@@ -34690,6 +34963,18 @@ YAML::Emitter &PrintVkStruct(YAML::Emitter &os, const VkStruct *pStruct) {
         case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAW_ACCESS_CHAINS_FEATURES_NV:
             os << *reinterpret_cast<const VkPhysicalDeviceRawAccessChainsFeaturesNV *>(pStruct);
             break;
+        case VK_STRUCTURE_TYPE_EXTERNAL_COMPUTE_QUEUE_DEVICE_CREATE_INFO_NV:
+            os << *reinterpret_cast<const VkExternalComputeQueueDeviceCreateInfoNV *>(pStruct);
+            break;
+        case VK_STRUCTURE_TYPE_EXTERNAL_COMPUTE_QUEUE_CREATE_INFO_NV:
+            os << *reinterpret_cast<const VkExternalComputeQueueCreateInfoNV *>(pStruct);
+            break;
+        case VK_STRUCTURE_TYPE_EXTERNAL_COMPUTE_QUEUE_DATA_PARAMS_NV:
+            os << *reinterpret_cast<const VkExternalComputeQueueDataParamsNV *>(pStruct);
+            break;
+        case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_COMPUTE_QUEUE_PROPERTIES_NV:
+            os << *reinterpret_cast<const VkPhysicalDeviceExternalComputeQueuePropertiesNV *>(pStruct);
+            break;
         case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMMAND_BUFFER_INHERITANCE_FEATURES_NV:
             os << *reinterpret_cast<const VkPhysicalDeviceCommandBufferInheritanceFeaturesNV *>(pStruct);
             break;
@@ -34850,6 +35135,9 @@ YAML::Emitter &PrintVkStruct(YAML::Emitter &os, const VkStruct *pStruct) {
             os << *reinterpret_cast<const VkPhysicalDevicePresentMeteringFeaturesNV *>(pStruct);
             break;
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+        case VK_STRUCTURE_TYPE_RENDERING_END_INFO_EXT:
+            os << *reinterpret_cast<const VkRenderingEndInfoEXT *>(pStruct);
+            break;
         case VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR:
             os << *reinterpret_cast<const VkAccelerationStructureGeometryTrianglesDataKHR *>(pStruct);
             break;
