@@ -1,3 +1,14 @@
+crashdiagnosticlayer (1.4.312.0~rc1-1lunarg22.04-1) jammy; urgency=medium
+
+  [ Jeremy Gebben ]
+  * build: Update Vulkan-Headers and VUL to 1.4.310
+  * build: Update Vulkan-Headers and VUL to 1.4.311
+  * build: Update SPIRV-Headers and glslang to latest
+  * build: Update Vulkan-Headers and VUL to 1.4.312
+  * build: Update shader dependencies to latest
+
+ -- john <john@odin>  Tue, 15 Apr 2025 15:59:24 -0600
+
 crashdiagnosticlayer (1.4.309.0~rc1-1lunarg22.04-1) jammy; urgency=medium
 
   [ Jeremy Gebben ]
