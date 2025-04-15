@@ -3130,6 +3130,30 @@ void CommandPrinter::PrintCmdCudaLaunchKernelNVArgs(YAML::Emitter &os, const Cmd
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
+void CommandPrinter::PrintCmdDispatchTileQCOMArgs(YAML::Emitter &os, const CmdDispatchTileQCOMArgs &args) {}
+
+void CommandPrinter::PrintCmdBeginPerTileExecutionQCOMArgs(YAML::Emitter &os,
+                                                           const CmdBeginPerTileExecutionQCOMArgs &args) {
+    os << YAML::Key << "pPerTileBeginInfo";
+    // pointer
+    if (args.pPerTileBeginInfo != nullptr) {
+        os << YAML::Value << *args.pPerTileBeginInfo;
+    } else {
+        os << YAML::Value << "nullptr";
+    }
+}
+
+void CommandPrinter::PrintCmdEndPerTileExecutionQCOMArgs(YAML::Emitter &os,
+                                                         const CmdEndPerTileExecutionQCOMArgs &args) {
+    os << YAML::Key << "pPerTileEndInfo";
+    // pointer
+    if (args.pPerTileEndInfo != nullptr) {
+        os << YAML::Value << *args.pPerTileEndInfo;
+    } else {
+        os << YAML::Value << "nullptr";
+    }
+}
+
 void CommandPrinter::PrintCmdBindDescriptorBuffersEXTArgs(YAML::Emitter &os,
                                                           const CmdBindDescriptorBuffersEXTArgs &args) {
     os << YAML::Key << "bufferCount";
@@ -4063,6 +4087,16 @@ void CommandPrinter::PrintCmdExecuteGeneratedCommandsEXTArgs(YAML::Emitter &os,
     // pointer
     if (args.pGeneratedCommandsInfo != nullptr) {
         os << YAML::Value << *args.pGeneratedCommandsInfo;
+    } else {
+        os << YAML::Value << "nullptr";
+    }
+}
+
+void CommandPrinter::PrintCmdEndRendering2EXTArgs(YAML::Emitter &os, const CmdEndRendering2EXTArgs &args) {
+    os << YAML::Key << "pRenderingEndInfo";
+    // pointer
+    if (args.pRenderingEndInfo != nullptr) {
+        os << YAML::Value << *args.pRenderingEndInfo;
     } else {
         os << YAML::Value << "nullptr";
     }
@@ -5735,6 +5769,27 @@ void CommandPrinter::PrintCommandParameters(YAML::Emitter &os, const Command &cm
             break;
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
+        case Command::Type::kCmdDispatchTileQCOM:
+            if (cmd.parameters) {
+                auto args = reinterpret_cast<CmdDispatchTileQCOMArgs *>(cmd.parameters);
+                PrintCmdDispatchTileQCOMArgs(os, *args);
+            }
+            break;
+
+        case Command::Type::kCmdBeginPerTileExecutionQCOM:
+            if (cmd.parameters) {
+                auto args = reinterpret_cast<CmdBeginPerTileExecutionQCOMArgs *>(cmd.parameters);
+                PrintCmdBeginPerTileExecutionQCOMArgs(os, *args);
+            }
+            break;
+
+        case Command::Type::kCmdEndPerTileExecutionQCOM:
+            if (cmd.parameters) {
+                auto args = reinterpret_cast<CmdEndPerTileExecutionQCOMArgs *>(cmd.parameters);
+                PrintCmdEndPerTileExecutionQCOMArgs(os, *args);
+            }
+            break;
+
         case Command::Type::kCmdBindDescriptorBuffersEXT:
             if (cmd.parameters) {
                 auto args = reinterpret_cast<CmdBindDescriptorBuffersEXTArgs *>(cmd.parameters);
@@ -6201,6 +6256,13 @@ void CommandPrinter::PrintCommandParameters(YAML::Emitter &os, const Command &cm
             if (cmd.parameters) {
                 auto args = reinterpret_cast<CmdExecuteGeneratedCommandsEXTArgs *>(cmd.parameters);
                 PrintCmdExecuteGeneratedCommandsEXTArgs(os, *args);
+            }
+            break;
+
+        case Command::Type::kCmdEndRendering2EXT:
+            if (cmd.parameters) {
+                auto args = reinterpret_cast<CmdEndRendering2EXTArgs *>(cmd.parameters);
+                PrintCmdEndRendering2EXTArgs(os, *args);
             }
             break;
 

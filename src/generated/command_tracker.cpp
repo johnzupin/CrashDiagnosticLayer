@@ -2035,6 +2035,35 @@ void CommandTracker::CmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const 
 }
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
+void CommandTracker::CmdDispatchTileQCOM(VkCommandBuffer commandBuffer) {
+    Command cmd{};
+    cmd.type = Command::Type::kCmdDispatchTileQCOM;
+    cmd.id = static_cast<uint32_t>(commands_.size()) + 1;
+    cmd.labels = labels_;
+    cmd.parameters = recorder_.RecordCmdDispatchTileQCOM(commandBuffer);
+    commands_.push_back(cmd);
+}
+
+void CommandTracker::CmdBeginPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                                  const VkPerTileBeginInfoQCOM* pPerTileBeginInfo) {
+    Command cmd{};
+    cmd.type = Command::Type::kCmdBeginPerTileExecutionQCOM;
+    cmd.id = static_cast<uint32_t>(commands_.size()) + 1;
+    cmd.labels = labels_;
+    cmd.parameters = recorder_.RecordCmdBeginPerTileExecutionQCOM(commandBuffer, pPerTileBeginInfo);
+    commands_.push_back(cmd);
+}
+
+void CommandTracker::CmdEndPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                                const VkPerTileEndInfoQCOM* pPerTileEndInfo) {
+    Command cmd{};
+    cmd.type = Command::Type::kCmdEndPerTileExecutionQCOM;
+    cmd.id = static_cast<uint32_t>(commands_.size()) + 1;
+    cmd.labels = labels_;
+    cmd.parameters = recorder_.RecordCmdEndPerTileExecutionQCOM(commandBuffer, pPerTileEndInfo);
+    commands_.push_back(cmd);
+}
+
 void CommandTracker::CmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
                                                  const VkDescriptorBufferBindingInfoEXT* pBindingInfos) {
     Command cmd{};
@@ -2717,6 +2746,16 @@ void CommandTracker::CmdExecuteGeneratedCommandsEXT(VkCommandBuffer commandBuffe
     cmd.labels = labels_;
     cmd.parameters =
         recorder_.RecordCmdExecuteGeneratedCommandsEXT(commandBuffer, isPreprocessed, pGeneratedCommandsInfo);
+    commands_.push_back(cmd);
+}
+
+void CommandTracker::CmdEndRendering2EXT(VkCommandBuffer commandBuffer,
+                                         const VkRenderingEndInfoEXT* pRenderingEndInfo) {
+    Command cmd{};
+    cmd.type = Command::Type::kCmdEndRendering2EXT;
+    cmd.id = static_cast<uint32_t>(commands_.size()) + 1;
+    cmd.labels = labels_;
+    cmd.parameters = recorder_.RecordCmdEndRendering2EXT(commandBuffer, pRenderingEndInfo);
     commands_.push_back(cmd);
 }
 

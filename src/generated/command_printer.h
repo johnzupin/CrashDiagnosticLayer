@@ -207,13 +207,17 @@ YAML::Emitter &operator<<(YAML::Emitter& os, const VkPerformanceConfigurationINT
 YAML::Emitter &operator<<(YAML::Emitter& os, const VkIndirectCommandsLayoutNV &a);
 #endif //VK_USE_64_BIT_PTR_DEFINES
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 #if VK_USE_64_BIT_PTR_DEFINES
 YAML::Emitter &operator<<(YAML::Emitter& os, const VkCudaModuleNV &a);
 #endif //VK_USE_64_BIT_PTR_DEFINES
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
+#ifdef VK_ENABLE_BETA_EXTENSIONS
 #if VK_USE_64_BIT_PTR_DEFINES
 YAML::Emitter &operator<<(YAML::Emitter& os, const VkCudaFunctionNV &a);
 #endif //VK_USE_64_BIT_PTR_DEFINES
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 
 #if VK_USE_64_BIT_PTR_DEFINES
 YAML::Emitter &operator<<(YAML::Emitter& os, const VkAccelerationStructureKHR &a);
@@ -237,8 +241,9 @@ YAML::Emitter &operator<<(YAML::Emitter& os, const VkOpticalFlowSessionNV &a);
 YAML::Emitter &operator<<(YAML::Emitter& os, const VkShaderEXT &a);
 #endif //VK_USE_64_BIT_PTR_DEFINES
 
+YAML::Emitter &operator<<(YAML::Emitter& os, const VkExternalComputeQueueNV &a);
 #if VK_USE_64_BIT_PTR_DEFINES
-YAML::Emitter &operator<<(YAML::Emitter& os, const VkIndirectExecutionSetEXT &a);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkIndirectExecutionSetEXT &a);
 #endif //VK_USE_64_BIT_PTR_DEFINES
 
 #if VK_USE_64_BIT_PTR_DEFINES
@@ -884,6 +889,7 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkDisplayPlaneProperties2KHR 
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkDisplayModeProperties2KHR &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkDisplayPlaneInfo2KHR &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkDisplayPlaneCapabilities2KHR &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceShaderBfloat16FeaturesKHR &t);
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDevicePortabilitySubsetFeaturesKHR &t);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
@@ -1312,6 +1318,12 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceCudaKernelLau
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceCudaKernelLaunchPropertiesNV &t);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceTileShadingFeaturesQCOM &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceTileShadingPropertiesQCOM &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderPassTileShadingCreateInfoQCOM &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPerTileBeginInfoQCOM &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPerTileEndInfoQCOM &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkDispatchTileInfoQCOM &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkQueryLowLatencySupportNV &t);
 #ifdef VK_USE_PLATFORM_METAL_EXT
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkExportMetalObjectCreateInfoEXT &t);
@@ -1529,9 +1541,9 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceRenderPassStr
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderPassStripeInfoARM &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderPassStripeBeginInfoARM &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderPassStripeSubmitInfoARM &t);
-YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensityMapOffsetFeaturesQCOM &t);
-YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensityMapOffsetPropertiesQCOM &t);
-YAML::Emitter &operator<<(YAML::Emitter &os, const VkSubpassFragmentDensityMapOffsetEndInfoQCOM &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensityMapOffsetFeaturesEXT &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceFragmentDensityMapOffsetPropertiesEXT &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderPassFragmentDensityMapOffsetEndInfoEXT &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkCopyMemoryIndirectCommandNV &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkCopyMemoryToImageIndirectCommandNV &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceCopyMemoryIndirectFeaturesNV &t);
@@ -1657,6 +1669,10 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceDescriptorPoo
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkDisplaySurfaceStereoCreateInfoNV &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkDisplayModeStereoPropertiesNV &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceRawAccessChainsFeaturesNV &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkExternalComputeQueueDeviceCreateInfoNV &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkExternalComputeQueueCreateInfoNV &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkExternalComputeQueueDataParamsNV &t);
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceExternalComputeQueuePropertiesNV &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceCommandBufferInheritanceFeaturesNV &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceShaderAtomicFloat16VectorFeaturesNV &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDeviceShaderReplicatedCompositesFeaturesEXT &t);
@@ -1740,6 +1756,7 @@ YAML::Emitter &operator<<(YAML::Emitter &os, const VkSetPresentConfigNV &t);
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkPhysicalDevicePresentMeteringFeaturesNV &t);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+YAML::Emitter &operator<<(YAML::Emitter &os, const VkRenderingEndInfoEXT &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkAccelerationStructureBuildRangeInfoKHR &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkAccelerationStructureGeometryTrianglesDataKHR &t);
 YAML::Emitter &operator<<(YAML::Emitter &os, const VkAccelerationStructureGeometryAabbsDataKHR &t);
@@ -1991,6 +2008,9 @@ class CommandPrinter {
 #ifdef VK_ENABLE_BETA_EXTENSIONS
     void PrintCmdCudaLaunchKernelNVArgs(YAML::Emitter &os, const CmdCudaLaunchKernelNVArgs &args);
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+    void PrintCmdDispatchTileQCOMArgs(YAML::Emitter &os, const CmdDispatchTileQCOMArgs &args);
+    void PrintCmdBeginPerTileExecutionQCOMArgs(YAML::Emitter &os, const CmdBeginPerTileExecutionQCOMArgs &args);
+    void PrintCmdEndPerTileExecutionQCOMArgs(YAML::Emitter &os, const CmdEndPerTileExecutionQCOMArgs &args);
     void PrintCmdBindDescriptorBuffersEXTArgs(YAML::Emitter &os, const CmdBindDescriptorBuffersEXTArgs &args);
     void PrintCmdSetDescriptorBufferOffsetsEXTArgs(YAML::Emitter &os, const CmdSetDescriptorBufferOffsetsEXTArgs &args);
     void PrintCmdBindDescriptorBufferEmbeddedSamplersEXTArgs(
@@ -2072,6 +2092,7 @@ class CommandPrinter {
     void PrintCmdPreprocessGeneratedCommandsEXTArgs(YAML::Emitter &os,
                                                     const CmdPreprocessGeneratedCommandsEXTArgs &args);
     void PrintCmdExecuteGeneratedCommandsEXTArgs(YAML::Emitter &os, const CmdExecuteGeneratedCommandsEXTArgs &args);
+    void PrintCmdEndRendering2EXTArgs(YAML::Emitter &os, const CmdEndRendering2EXTArgs &args);
     void PrintCmdBuildAccelerationStructuresKHRArgs(YAML::Emitter &os,
                                                     const CmdBuildAccelerationStructuresKHRArgs &args);
     void PrintCmdBuildAccelerationStructuresIndirectKHRArgs(YAML::Emitter &os,

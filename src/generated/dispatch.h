@@ -688,14 +688,27 @@ struct DeviceDispatchTable {
     PFN_vkDestroyPrivateDataSlotEXT DestroyPrivateDataSlotEXT;
     PFN_vkSetPrivateDataEXT SetPrivateDataEXT;
     PFN_vkGetPrivateDataEXT GetPrivateDataEXT;
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     PFN_vkCreateCudaModuleNV CreateCudaModuleNV;
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     PFN_vkGetCudaModuleCacheNV GetCudaModuleCacheNV;
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     PFN_vkCreateCudaFunctionNV CreateCudaFunctionNV;
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     PFN_vkDestroyCudaModuleNV DestroyCudaModuleNV;
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     PFN_vkDestroyCudaFunctionNV DestroyCudaFunctionNV;
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 #ifdef VK_ENABLE_BETA_EXTENSIONS
     PFN_vkCmdCudaLaunchKernelNV CmdCudaLaunchKernelNV;
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+    PFN_vkCmdDispatchTileQCOM CmdDispatchTileQCOM;
+    PFN_vkCmdBeginPerTileExecutionQCOM CmdBeginPerTileExecutionQCOM;
+    PFN_vkCmdEndPerTileExecutionQCOM CmdEndPerTileExecutionQCOM;
 #ifdef VK_USE_PLATFORM_METAL_EXT
     PFN_vkExportMetalObjectsEXT ExportMetalObjectsEXT;
 #endif  // VK_USE_PLATFORM_METAL_EXT
@@ -835,6 +848,9 @@ struct DeviceDispatchTable {
 #ifdef VK_USE_PLATFORM_SCREEN_QNX
     PFN_vkGetScreenBufferPropertiesQNX GetScreenBufferPropertiesQNX;
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
+    PFN_vkCreateExternalComputeQueueNV CreateExternalComputeQueueNV;
+    PFN_vkDestroyExternalComputeQueueNV DestroyExternalComputeQueueNV;
+    PFN_vkGetExternalComputeQueueDataNV GetExternalComputeQueueDataNV;
     PFN_vkGetClusterAccelerationStructureBuildSizesNV GetClusterAccelerationStructureBuildSizesNV;
     PFN_vkCmdBuildClusterAccelerationStructureIndirectNV CmdBuildClusterAccelerationStructureIndirectNV;
     PFN_vkGetPartitionedAccelerationStructuresBuildSizesNV GetPartitionedAccelerationStructuresBuildSizesNV;
@@ -854,6 +870,7 @@ struct DeviceDispatchTable {
 #ifdef VK_USE_PLATFORM_METAL_EXT
     PFN_vkGetMemoryMetalHandlePropertiesEXT GetMemoryMetalHandlePropertiesEXT;
 #endif  // VK_USE_PLATFORM_METAL_EXT
+    PFN_vkCmdEndRendering2EXT CmdEndRendering2EXT;
     PFN_vkCreateAccelerationStructureKHR CreateAccelerationStructureKHR;
     PFN_vkDestroyAccelerationStructureKHR DestroyAccelerationStructureKHR;
     PFN_vkCmdBuildAccelerationStructuresKHR CmdBuildAccelerationStructuresKHR;

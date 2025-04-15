@@ -1462,6 +1462,22 @@ virtual void PreCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCud
 virtual void PostCmdCudaLaunchKernelNV(VkCommandBuffer commandBuffer, const VkCudaLaunchInfoNV* pLaunchInfo) {}
 #endif  // VK_ENABLE_BETA_EXTENSIONS
 
+virtual void PreCmdDispatchTileQCOM(VkCommandBuffer commandBuffer) {}
+
+virtual void PostCmdDispatchTileQCOM(VkCommandBuffer commandBuffer) {}
+
+virtual void PreCmdBeginPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                             const VkPerTileBeginInfoQCOM* pPerTileBeginInfo) {}
+
+virtual void PostCmdBeginPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                              const VkPerTileBeginInfoQCOM* pPerTileBeginInfo) {}
+
+virtual void PreCmdEndPerTileExecutionQCOM(VkCommandBuffer commandBuffer, const VkPerTileEndInfoQCOM* pPerTileEndInfo) {
+}
+
+virtual void PostCmdEndPerTileExecutionQCOM(VkCommandBuffer commandBuffer,
+                                            const VkPerTileEndInfoQCOM* pPerTileEndInfo) {}
+
 virtual void PreCmdBindDescriptorBuffersEXT(VkCommandBuffer commandBuffer, uint32_t bufferCount,
                                             const VkDescriptorBufferBindingInfoEXT* pBindingInfos) {}
 
@@ -1841,6 +1857,10 @@ virtual void PreCmdExecuteGeneratedCommandsEXT(VkCommandBuffer commandBuffer, Vk
 
 virtual void PostCmdExecuteGeneratedCommandsEXT(VkCommandBuffer commandBuffer, VkBool32 isPreprocessed,
                                                 const VkGeneratedCommandsInfoEXT* pGeneratedCommandsInfo) {}
+
+virtual void PreCmdEndRendering2EXT(VkCommandBuffer commandBuffer, const VkRenderingEndInfoEXT* pRenderingEndInfo) {}
+
+virtual void PostCmdEndRendering2EXT(VkCommandBuffer commandBuffer, const VkRenderingEndInfoEXT* pRenderingEndInfo) {}
 
 virtual void PreCmdBuildAccelerationStructuresKHR(
     VkCommandBuffer commandBuffer, uint32_t infoCount, const VkAccelerationStructureBuildGeometryInfoKHR* pInfos,

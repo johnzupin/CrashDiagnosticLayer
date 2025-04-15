@@ -877,14 +877,27 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
     dt->DestroyPrivateDataSlotEXT = (PFN_vkDestroyPrivateDataSlotEXT)pa(device, "vkDestroyPrivateDataSlotEXT");
     dt->SetPrivateDataEXT = (PFN_vkSetPrivateDataEXT)pa(device, "vkSetPrivateDataEXT");
     dt->GetPrivateDataEXT = (PFN_vkGetPrivateDataEXT)pa(device, "vkGetPrivateDataEXT");
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     dt->CreateCudaModuleNV = (PFN_vkCreateCudaModuleNV)pa(device, "vkCreateCudaModuleNV");
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     dt->GetCudaModuleCacheNV = (PFN_vkGetCudaModuleCacheNV)pa(device, "vkGetCudaModuleCacheNV");
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     dt->CreateCudaFunctionNV = (PFN_vkCreateCudaFunctionNV)pa(device, "vkCreateCudaFunctionNV");
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     dt->DestroyCudaModuleNV = (PFN_vkDestroyCudaModuleNV)pa(device, "vkDestroyCudaModuleNV");
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+#ifdef VK_ENABLE_BETA_EXTENSIONS
     dt->DestroyCudaFunctionNV = (PFN_vkDestroyCudaFunctionNV)pa(device, "vkDestroyCudaFunctionNV");
+#endif  // VK_ENABLE_BETA_EXTENSIONS
 #ifdef VK_ENABLE_BETA_EXTENSIONS
     dt->CmdCudaLaunchKernelNV = (PFN_vkCmdCudaLaunchKernelNV)pa(device, "vkCmdCudaLaunchKernelNV");
 #endif  // VK_ENABLE_BETA_EXTENSIONS
+    dt->CmdDispatchTileQCOM = (PFN_vkCmdDispatchTileQCOM)pa(device, "vkCmdDispatchTileQCOM");
+    dt->CmdBeginPerTileExecutionQCOM = (PFN_vkCmdBeginPerTileExecutionQCOM)pa(device, "vkCmdBeginPerTileExecutionQCOM");
+    dt->CmdEndPerTileExecutionQCOM = (PFN_vkCmdEndPerTileExecutionQCOM)pa(device, "vkCmdEndPerTileExecutionQCOM");
 #ifdef VK_USE_PLATFORM_METAL_EXT
     dt->ExportMetalObjectsEXT = (PFN_vkExportMetalObjectsEXT)pa(device, "vkExportMetalObjectsEXT");
 #endif  // VK_USE_PLATFORM_METAL_EXT
@@ -1079,6 +1092,11 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
 #ifdef VK_USE_PLATFORM_SCREEN_QNX
     dt->GetScreenBufferPropertiesQNX = (PFN_vkGetScreenBufferPropertiesQNX)pa(device, "vkGetScreenBufferPropertiesQNX");
 #endif  // VK_USE_PLATFORM_SCREEN_QNX
+    dt->CreateExternalComputeQueueNV = (PFN_vkCreateExternalComputeQueueNV)pa(device, "vkCreateExternalComputeQueueNV");
+    dt->DestroyExternalComputeQueueNV =
+        (PFN_vkDestroyExternalComputeQueueNV)pa(device, "vkDestroyExternalComputeQueueNV");
+    dt->GetExternalComputeQueueDataNV =
+        (PFN_vkGetExternalComputeQueueDataNV)pa(device, "vkGetExternalComputeQueueDataNV");
     dt->GetClusterAccelerationStructureBuildSizesNV =
         (PFN_vkGetClusterAccelerationStructureBuildSizesNV)pa(device, "vkGetClusterAccelerationStructureBuildSizesNV");
     dt->CmdBuildClusterAccelerationStructureIndirectNV = (PFN_vkCmdBuildClusterAccelerationStructureIndirectNV)pa(
@@ -1112,6 +1130,7 @@ void InitDeviceDispatchTable(VkDevice device, PFN_vkGetDeviceProcAddr pa, Device
     dt->GetMemoryMetalHandlePropertiesEXT =
         (PFN_vkGetMemoryMetalHandlePropertiesEXT)pa(device, "vkGetMemoryMetalHandlePropertiesEXT");
 #endif  // VK_USE_PLATFORM_METAL_EXT
+    dt->CmdEndRendering2EXT = (PFN_vkCmdEndRendering2EXT)pa(device, "vkCmdEndRendering2EXT");
     dt->CreateAccelerationStructureKHR =
         (PFN_vkCreateAccelerationStructureKHR)pa(device, "vkCreateAccelerationStructureKHR");
     dt->DestroyAccelerationStructureKHR =

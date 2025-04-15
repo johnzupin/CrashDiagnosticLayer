@@ -427,8 +427,16 @@ const char *Command::GetCommandName(const Command &cmd) {
             return "vkCmdBindPipelineShaderGroupNV";
         case Command::Type::kCmdSetDepthBias2EXT:
             return "vkCmdSetDepthBias2EXT";
+#ifdef VK_ENABLE_BETA_EXTENSIONS
         case Command::Type::kCmdCudaLaunchKernelNV:
             return "vkCmdCudaLaunchKernelNV";
+#endif  // VK_ENABLE_BETA_EXTENSIONS
+        case Command::Type::kCmdDispatchTileQCOM:
+            return "vkCmdDispatchTileQCOM";
+        case Command::Type::kCmdBeginPerTileExecutionQCOM:
+            return "vkCmdBeginPerTileExecutionQCOM";
+        case Command::Type::kCmdEndPerTileExecutionQCOM:
+            return "vkCmdEndPerTileExecutionQCOM";
         case Command::Type::kCmdBindDescriptorBuffersEXT:
             return "vkCmdBindDescriptorBuffersEXT";
         case Command::Type::kCmdSetDescriptorBufferOffsetsEXT:
@@ -563,6 +571,8 @@ const char *Command::GetCommandName(const Command &cmd) {
             return "vkCmdPreprocessGeneratedCommandsEXT";
         case Command::Type::kCmdExecuteGeneratedCommandsEXT:
             return "vkCmdExecuteGeneratedCommandsEXT";
+        case Command::Type::kCmdEndRendering2EXT:
+            return "vkCmdEndRendering2EXT";
         case Command::Type::kCmdBuildAccelerationStructuresKHR:
             return "vkCmdBuildAccelerationStructuresKHR";
         case Command::Type::kCmdBuildAccelerationStructuresIndirectKHR:
