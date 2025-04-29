@@ -1,3 +1,11 @@
+crashdiagnosticlayer (1.4.313.0~rc1-1lunarg22.04-1) jammy; urgency=medium
+
+  [ Jeremy Gebben ]
+  * build: Update Vulkan-Headers and VUL to 1.4.313
+  * build: Update shader dependencies for next sdk
+
+ -- john <john@odin>  Tue, 29 Apr 2025 11:46:29 -0600
+
 crashdiagnosticlayer (1.4.312.0~rc1-1lunarg22.04-1) jammy; urgency=medium
 
   [ Jeremy Gebben ]
